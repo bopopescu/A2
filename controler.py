@@ -363,9 +363,9 @@ def ultima_consulta(id_profissional,id_cliente):
     cursor.execute(query)
     return cursor.fetchall()[0][0]
 
-def filtro_atendimentos_mes(id_profissional, mes):
+def filtro_atendimentos_mes(id_profissional, mes, ano):
     global cursor
-    query = "SELECT * FROM atendimentos WHERE month(data_consulta)=" + str(mes) + " AND  id_profissional=" + str(id_profissional)
+    query = "SELECT * FROM atendimentos WHERE month(data_consulta)=" + str(mes) + " AND year(data_consulta)=" +str(ano) +" AND  id_profissional=" + str(id_profissional)
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -377,18 +377,18 @@ def converte_dinheiro(dinheiro):
     grana = round(float(inteiro+'.'+centavos),2)
     return grana
 
-def dinheiro_mes(id_profissional, mes):
-    atendimentos = filtro_atendimentos_mes(id_profissional, mes)
+def dinheiro_mes(id_profissional, mes, ano):
+    atendimentos = filtro_atendimentos_mes(id_profissional, mes, ano)
     grana = 0
     for atendimento in atendimentos:
         grana+=converte_dinheiro(atendimento[3])
     return grana
 
-def formas_pagamento_mes(id_profissional, mes):
+def formas_pagamento_mes(id_profissional, mes, ano):
     credito = 0
     debito = 0
     dinheiro = 0
-    atendimentos = filtro_atendimentos_mes(id_profissional, mes)
+    atendimentos = filtro_atendimentos_mes(id_profissional, mes, ano)
     for atendimento in atendimentos:
         if atendimento[6]==1:
             credito+=1
@@ -399,9 +399,9 @@ def formas_pagamento_mes(id_profissional, mes):
     formas = [credito, debito, dinheiro]
     total = sum(formas)
 
-    porc_credito = credito/total
-    porc_debito = debito/total
-    porc_dinheiro = dinheiro/total
+    porc_credito = 100*credito/total
+    porc_debito = 100*debito/total
+    porc_dinheiro = 100*dinheiro/total
     porc_formas = [porc_credito, porc_debito, porc_dinheiro]
 
     return formas, porc_formas 
