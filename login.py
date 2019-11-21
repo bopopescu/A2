@@ -47,7 +47,28 @@ class Profissional(Usuario):
         self.complemento = dados['complemento']
         self.cidade = dados['cidade']
         self.estado = dados['estado']
+    
+    def ganho_mensal(self,mes,ano):
+        """retorna o quanto o profissional ganhou no mes naquele ano"""
+        return controler.dinheiro_mes(self.id, mes, ano)
 
+    def atendimento_mensal(self,mes,ano):
+        """retorna o quanto o profissional ganhou no mes naquele ano"""
+        return len(controler.filtro_atendimentos_mes(self.id, mes, ano))
+
+    def ganho_anual(self, ano):
+        """Retorna uma lista com todo o ganho de todos os meses."""
+        lista_grana = []
+        for i in range(1,13):
+            list.append(lista_grana, self.ganho_mensal(i, ano))
+        return lista_grana
+    
+    def atendimento_anual(self, ano):
+        """Retorna uma lista com todo o ganho de todos os meses."""
+        lista_atendimento = []
+        for i in range(1,13):
+            list.append(lista_atendimento, self.atendimento_mensal(i, ano))
+        return lista_atendimento
 
 class Cliente(Usuario):                                              #Criando Clase profissional que é subclasse de Usuário
 
@@ -557,6 +578,17 @@ def enviaEmail(email):
     with app.open_resource("recibo_teste.pdf") as recibo:
         msg.attach("recibo_teste.pdf", "application/pdf", recibo.read())
     mail.send(msg)
+
+@app.route("/DashboardFinanceira")
+def DashboardFinanceira():
+    if "user" in session:
+        profissional = Profissional(session["id"])
+
+        grana_anual = profissional.ganho_anual("2019")
+        atendimento_anual = profissional.atendimento_anual("2019")
+
+        return render_template("DashboardFinanceira.html", ganhos = grana_anual, atendimentos = atendimento_anual)
+
 
 
 if __name__ == '__main__':

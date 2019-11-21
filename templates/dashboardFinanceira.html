@@ -1,0 +1,80 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Chart.js demo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script src="static/js/financeiro.js"></script>
+</head>
+<body>
+
+  <h1>Dashboard Financeira</h1>
+  <div>
+      <canvas id="myChart" width="600" height="400"></canvas>
+      <script>
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "line",
+        
+          // The data for our dataset
+          data: {
+            labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"],
+            datasets: [
+              {
+                label: "Ganhos anual",
+                backgroundColor: "transparent",
+                borderColor: "#82b4b4",
+                data: {{ganhos}}
+              }]
+        },
+// Configuration options go here
+        options: {        
+            scales: {
+                yAxes: [{
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            return float2real(value);
+                        }
+                    }
+                }]                
+            },
+            responsive:false,
+            maintainAspectRatio: false
+        }
+    });
+      </script>
+  </div>
+
+  <div>
+      <canvas id="myChartBar" width="600" height="400"></canvas>
+      <script>
+        var ctx = document.getElementById("myChartBar").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "bar",
+          // The data for our dataset
+          data: {
+            labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"],
+            datasets: [
+              {
+                label: "Atendimentos",
+                backgroundColor: "rgb(255, 99, 132)",
+                borderColor: "rgb(255, 99, 132)",
+                data: {{atendimentos}}
+              }
+            ]
+          },
+          // Configuration options go here
+          options: {
+            responsive:false,
+            maintainAspectRatio: false
+          }
+        });
+      </script>
+
+  </div>
+</body>
+</html>
