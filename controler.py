@@ -269,7 +269,7 @@ def pre_cadastra(nome, cpf, telefone, email):
 def completa_cadastro_cliente(nome, data_de_nascimento, cpf, telefone, email, senha, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
     id_cliente = cpf_id(cpf, 'usuarios')
     ups_usuario = {'nome':nome, 'data_de_nascimento':data_de_nascimento, 'telefone':telefone, 'email':email, 'user_mail':user_mail, 'domain_mail':domain_mail, 'senha':senha, 'cep':cep, 'endereco':endereco, 'numero':numero, 'complemento':complemento, 'cidade':cidade, 'estado':estado, 'nome_responsavel':nome_responsavel, 'cpf_responsavel':cpf_responsavel}
-    update(ups,'clientes','id_cliente='+str(id_cliente))
+    update(ups_usuario,'clientes','id_cliente='+str(id_cliente))
 
 def completa_cadastro_profissional():
     pass
@@ -363,6 +363,12 @@ def ultima_consulta(id_profissional,id_cliente):
     cursor.execute(query)
     return cursor.fetchall()[0][0]
 
+def filtro_atendimentos_mes(id_profissional, mes):
+    global cursor
+    query = "SELECT * FROM atendimentos WHERE month(data_consulta)=" + str(mes) + " AND  id_profissional=" + str(id_profissional)
+    cursor.execute(query)
+    return cursor.fetchall()
+
 def converte_dinheiro(dinheiro):
     valor = dinheiro[2:]
     split = valor.split(',')
@@ -371,15 +377,33 @@ def converte_dinheiro(dinheiro):
     grana = round(float(inteiro+'.'+centavos),2)
     return grana
 
-def filtro_atendimentos_mes(id_profissional, mes):
-    global cursor
-    query = "SELECT * FROM atendimentos WHERE month(data_consulta)=" + str(mes) + " AND  id_profissional=" + str(id_profissional)
-    cursor.execute(query)
-    return cursor.fetchall()
-
 def dinheiro_mes(id_profissional, mes):
     atendimentos = filtro_atendimentos_mes(id_profissional, mes)
     grana = 0
     for atendimento in atendimentos:
         grana+=converte_dinheiro(atendimento[3])
     return grana
+
+def formas_pagamento_mes(id_profissional, mes):
+    credito = 0
+    debito = 0
+    dinheiro = 0
+    atendimentos = filtro_atendimentos_mes(id_profissional, mes)
+    for atendimento in atendimentos:
+        if atendimento[6]==1:
+            credito+=1
+        elif atendimento[6]==2:
+            debito+=1
+        elif atendimento[6]==3:
+            dinheiro+=1
+    formas = [credito, debito, dinheiro]
+    total = sum(formas)
+
+    porc_credito = credito/total
+    porc_debito = debito/total
+    porc_dinheiro = dinheiro/total
+    porc_formas = [porc_credito, porc_debito, porc_dinheiro]
+
+    return formas, porc_formas 
+
+
