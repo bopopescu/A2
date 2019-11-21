@@ -398,12 +398,4 @@ def formas_pagamento_mes(id_profissional, mes, ano):
             dinheiro+=1
     formas = [credito, debito, dinheiro]
     total = sum(formas)
-
-    porc_credito = 100*credito/total
-    porc_debito = 100*debito/total
-    porc_dinheiro = 100*dinheiro/total
-    porc_formas = [porc_credito, porc_debito, porc_dinheiro]
-
-    return formas, porc_formas 
-
-
+    return formas

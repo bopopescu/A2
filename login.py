@@ -56,6 +56,11 @@ class Profissional(Usuario):
         """retorna o quanto o profissional ganhou no mes naquele ano"""
         return len(controler.filtro_atendimentos_mes(self.id, mes, ano))
 
+    def forma_pagamentoMensal(self,mes,ano):
+        """retorna o quanto o profissional ganhou no mes naquele ano"""
+        return controler.formas_pagamento_mes(self.id, mes, ano)
+
+
     def ganho_anual(self, ano):
         """Retorna uma lista com todo o ganho de todos os meses."""
         lista_grana = []
@@ -64,12 +69,21 @@ class Profissional(Usuario):
         return lista_grana
     
     def atendimento_anual(self, ano):
-        """Retorna uma lista com todo o ganho de todos os meses."""
+        """Retorna uma lista com todo o numero de atendimento de todos os meses."""
         lista_atendimento = []
         for i in range(1,13):
             list.append(lista_atendimento, self.atendimento_mensal(i, ano))
         return lista_atendimento
 
+    def formaPagamento_anual(self, ano):
+        """Retorna uma lista a quantidade de atendimento de todos os meses."""
+        lista_formaPagamento_anual = [0,0,0]
+        for i in range(1,13):
+            lista_formaPagamento_anual[0] += self.forma_pagamentoMensal(i, ano)[0]
+            lista_formaPagamento_anual[1] += self.forma_pagamentoMensal(i, ano)[1]
+            lista_formaPagamento_anual[2] += self.forma_pagamentoMensal(i, ano)[2]
+        return lista_formaPagamento_anual
+    
 class Cliente(Usuario):                                              #Criando Clase profissional que é subclasse de Usuário
 
     def __init__(self,id):
@@ -586,8 +600,9 @@ def DashboardFinanceira():
 
         grana_anual = profissional.ganho_anual("2019")
         atendimento_anual = profissional.atendimento_anual("2019")
+        formaPagamento_anual = profissional.formaPagamento_anual("2019")
 
-        return render_template("DashboardFinanceira.html", ganhos = grana_anual, atendimentos = atendimento_anual)
+        return render_template("DashboardFinanceira.html", ganhos = grana_anual, atendimentos = atendimento_anual, formaPagamento = formaPagamento_anual)
 
 
 
