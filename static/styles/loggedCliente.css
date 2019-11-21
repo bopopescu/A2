@@ -1,0 +1,205 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: sans-serif;
+}
+
+body{
+  background: #69acd8;
+  background: -webkit-linear-gradient(-135deg, #2179b4, #69acd8);
+  background: -o-linear-gradient(-135deg, #2179b4, #69acd8);
+  background: -moz-linear-gradient(-135deg, #2179b4, #69acd8);
+  background: linear-gradient(-135deg, #2179b4, #69acd8);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.container-login100 {
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  -webkit-animation-name: none; /* Fade in the background */
+  -webkit-animation-duration: 0.5s;
+  animation-name: none;
+  animation-duration: 0.5s;
+  filter: blur(0px);
+}
+
+.botao {
+  background: #bdc3c773;
+  background: linear-gradient(0deg, #bdc3c7ab, #bdc3c773);
+  border-radius: 20px;
+  border-width: 0;
+  height: 100px;
+  min-width: 250px;
+  font-size: 25px;
+  font-weight: 600;
+  padding: 0 20px 0 20px;
+  margin: 15px;
+  color: #fff;
+  transition-duration: 0.2s;
+  -webkit-transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.botao:hover {
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.199);
+}
+
+.botoes {
+  position: relative;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+}
+
+.greetings{
+  color: #fff;
+  font-size: 35px;
+  transform: translate(0,-150px)
+}
+
+.sair{
+  background: #bdc3c773;
+  background: linear-gradient(0deg, #2ecc71, #2ecc70c5);
+  border-radius: 20px;
+  border-width: 0;
+  height: 50px;
+  /* min-width: 300px; */
+  font-size: 25px;
+  font-weight: 600;
+  padding: 0 40px 0 40px;
+  margin: 15px;
+  color: #fff;
+  transition-duration: 0.2s;
+  -webkit-transition-duration: 0.2s;
+  cursor: pointer;
+  transform: translate(0,150px)
+}
+
+.sair:hover {
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.199);
+}
+
+.wrap-login100 {
+  /* width: 960px; */
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* padding: 177px 130px 33px 95px; */
+  /* padding: 50px; */
+  width: 600px;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  -webkit-animation-name: fadeIn; /* Fade in the background */
+  -webkit-animation-duration: 0.5s;
+  animation-name: fadeIn;
+  animation-duration: 0.5s;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+  position: fixed;
+  background-color: #fff;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 30px;
+  flex-wrap: wrap;
+
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s
+}
+
+.escolha {
+  border-radius: 20px;
+  border-width: 0;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  margin: 15px;
+  color: #fff;
+  transition-duration: 0.2s;
+  -webkit-transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.escolha:hover{
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.199);
+}
+
+/* Add Animation */
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@keyframes fadeOut {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@keyframes blur {
+  from {
+    -webkit-filter: blur(0px);
+    -moz-filter: blur(0px);
+    -o-filter: blur(0px);
+    -ms-filter: blur(0px);
+  }
+  to {
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+  }
+}
+
+@keyframes unblur {
+  from {
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+  }
+  to {
+    -webkit-filter: blur(0px);
+    -moz-filter: blur(0px);
+    -o-filter: blur(0px);
+    -ms-filter: blur(0px);
+  }
+}

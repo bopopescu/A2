@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/CadastrarAtendimentos.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="../static/styles/login.css"> -->
+
+
+    <title>Cadastro atendimentos</title>
+</head>
+
+<body>
+    <i class="fa icon" style="font-size: 40px;"
+        onclick="window.location.href='{{ url_for( 'RecibosProfissional')}}'">&#xf0a8;</i>
+    <div class="container-login100" id="container">
+        <div class="wrap-login100" id="wrap">
+            <form method="POST" id="form" style="text-align: center">
+                <h1 class="welcome">Cadastrar atendimento</h1>
+                <!--CPF do cliente -->
+                <div class="inputBox">
+                    <input type="tel" name="cpfCliente" id="cpf" placeholder="CPF do cliente"
+                        value="{{ request.form.cpfCliente }}" class="input" maxlength="14" onblur="validarCPF('cpf')"
+                        oninput="this.value = CPF(`cpf`, this.value, event)" />
+                </div>
+                <!-- Nome do cliente -->
+                <div class="inputBox">
+                    <input type="text" name="nome" placeholder="Nome do cliente"
+                        value="{{ nome and nome or request.form.nome }}" class="input" />
+                </div>
+                <!-- Email do cliente -->
+                <div class="inputBox">
+                    <input type="email" name="email" placeholder="E-mail do cliente"
+                        value="{{ email and email or request.form.email }}" class="input" />
+                </div>
+                <!-- Telefone do cliente -->
+                <div class="inputBox" id="telefone">
+                    <input type="tel" name="telefone" placeholder="Telefone do cliente"
+                        value="{{ telefone and telefone or request.form.telefone }}" class="input" maxlength="14"
+                        oninput="this.value = TEL(this.value, event)" />
+                </div>
+                <!-- Data do atendimento -->
+                <div class="inputBox">
+                    <input type="tel" id="data" name="dataConsulta" placeholder="Data do atendimento"
+                        value="{{request.form.dataConsulta }}" class="input" onblur="validaData()"
+                        oninput="this.value = DDMMYYYY(this.value, event)" maxlength="10" id="dataConsulta" />
+                </div>
+                <!-- Valor do atendimento -->
+                <div class="inputBox">
+                    <input type="tel" name="valor" id="valor" placeholder="Valor do atendimento" value="{{
+                request.form.valor }}" class="input" oninput="this.value = DINHEIRO(this.value, event)" />
+                </div>
+                <!-- forma de pagamento -->
+                <div class="inputBox">
+                    <select  name="forma_pagamento" class="input"> 
+                        <option value="0">Forma de pagamento</option>
+                        <option value="1">Cartão de crédito</option>
+                        <option value="2">Cartão de débito</option>
+                        <option value="3">Dinheiro</option>
+                    </select>
+                </div>
+                <!-- numero de parcelas -->
+                <div class="inputBox">
+                        <input type="number" min = "1" max = "99" name="numero_parcelas" id="numero_parcelas" placeholder="Número de Parcelas" value="{{
+                    request.form.numero_parcelas }}" class="input"/>
+                </div>
+
+                {% if error %}
+                <p class="error" style="text-align: center; color: #e74c3c; font-size: 14px">{{ error }}
+                    {% endif %}
+                    <!-- Submit -->
+                    <div class="inputBox" style="padding-top: 30px; padding-bottom: 30px;">
+                        <input class="botao" type="submit" id="botao" name="botao" value="Enviar"
+                            onclick="document.getElementById('form').submit()">
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+</body>
+
+
+<script>
+    function DDMMYYYY(value, event) {
+        document.getElementById("data").className = "input";
+
+        let newValue = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+
+        const dayOrMonth = (index) => index % 2 === 1 && index < 4;
+
+        // on delete key.
+        if (!event.data) {
+            return value;
+        }
+
+        return newValue.split('').map((v, i) => dayOrMonth(i) ? v + '/' : v).join('');
+    };
+
+    function validaData() {
+        var data = document.getElementById("data").value;
+        var dia = Number(data.slice(6, 10) + data.slice(3, 5) + data.slice(0, 2))
+        var hoje = new Date()
+        hoje = Number(String(hoje.getFullYear()) + ("0" + String(hoje.getMonth() + 1)).slice(-2) + ("0" + String(hoje.getDate())).slice(-2))
+        if (data.length != 10 || dia > hoje) {
+            document.getElementById("data").className = "input cpfError";
+        }
+        else {
+            document.getElementById("data").className = "input";
+        }
+    }
+
+    function CPF(id, value, event) {
+        document.getElementById(id).className = 'input'
+        if (value == "CPF Inválid") {
+            if (!event.data) {
+                return '';
+            }
+        }
+        let newValue = value.replace(/[^0-9]/g, '');
+
+
+        const aux = (index) => index == 2 || index == 5;
+
+        // on delete key.
+        if (!event.data) {
+            return value;
+        }
+
+        return newValue.split('').map((v, i) => aux(i) ? v + '.' : (i == 8 ? v + '-' : v)).join('');
+    };
+
+    function validarCPF(id) {
+        var cpf = document.getElementById(id).value
+        var digitos = cpf.length
+        if (digitos == 14) {
+            function valida() {
+                cpf = cpf.replace(/[^\d]+/g, '');
+                if (cpf == '') return false;
+                // Elimina CPFs invalidos conhecidos
+                if (cpf.length != 11 ||
+                    cpf == "00000000000" ||
+                    cpf == "11111111111" ||
+                    cpf == "22222222222" ||
+                    cpf == "33333333333" ||
+                    cpf == "44444444444" ||
+                    cpf == "55555555555" ||
+                    cpf == "66666666666" ||
+                    cpf == "77777777777" ||
+                    cpf == "88888888888" ||
+                    cpf == "99999999999")
+                    return false;
+                // Valida 1o digito
+                add = 0;
+                for (i = 0; i < 9; i++)
+                    add += parseInt(cpf.charAt(i)) * (10 - i);
+                rev = 11 - (add % 11);
+                if (rev == 10 || rev == 11)
+                    rev = 0;
+                if (rev != parseInt(cpf.charAt(9)))
+                    return false;
+                // Valida 2o digito
+                add = 0;
+                for (i = 0; i < 10; i++)
+                    add += parseInt(cpf.charAt(i)) * (11 - i);
+                rev = 11 - (add % 11);
+                if (rev == 10 || rev == 11)
+                    rev = 0;
+                if (rev != parseInt(cpf.charAt(10)))
+                    return false;
+                return true
+            }
+
+            if (!valida()) {
+                document.getElementById(id).value = "CPF Inválido";
+                document.getElementById(id).className = "input cpfError";
+            }
+            else {
+                if (digitos == 14) {
+                    // document.getElementById('botao').click()
+                    document.getElementById("form").submit();
+                };
+            }
+        }
+        else {
+            document.getElementById(id).className = "input cpfError";
+        }
+    }
+
+    function TEL(value, event) {
+        let newValue = value.replace(/[^0-9]/g, '');
+
+        // on delete key.
+        if (!event.data) {
+            return value;
+        }
+
+        newValue = "(" + newValue;
+
+        if (newValue.split('').length > 11) {
+            return newValue.split('').map((v, i) => i == 2 ? v + ")" : (i == 7 ? v + "-" : v)).join('');
+        } else {
+            return newValue.split('').map((v, i) => i == 2 ? v + ")" : (i == 6 ? v + "-" : v)).join('');
+        }
+    };
+
+    function DINHEIRO(value, event) {
+        let newValue = value.replace(/[^0-9]/g, '');
+
+        // on delete key.
+        if (!event.data) {
+            return value;
+        }
+
+        newValue = "R$" + newValue;
+
+        var len = newValue.split('').length;
+
+        return newValue.split('').map((v, i) => len - i == 3 && len >= 4 ? v + "," : v).join('');
+    };
+</script>
+
+
+
+</html>

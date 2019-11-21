@@ -1,0 +1,82 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: sans-serif;
+}
+
+body{
+  background: #69acd8;
+  background: -webkit-linear-gradient(-135deg, #2179b4, #69acd8);
+  background: -o-linear-gradient(-135deg, #2179b4, #69acd8);
+  background: -moz-linear-gradient(-135deg, #2179b4, #69acd8);
+  background: linear-gradient(-135deg, #2179b4, #69acd8);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.container-login100 {
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.wrap-login100 {
+  /* width: 960px; */
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* padding: 177px 130px 33px 95px; */
+  /* padding: 50px; */
+  width: 400px;
+}
+
+.texto {
+  text-align: justify;
+  padding-top: 30px;
+  font-size: 20px;
+  color: #5a5a5a
+}
+
+.link {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.link:hover{
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+
+.icon {
+  position: absolute;
+  font-size: 40px;
+  margin: 15px;
+  color: white;
+}
+
+.icon:hover{
+  color: rgb(218, 218, 218);
+  cursor: pointer;
+}
