@@ -104,10 +104,10 @@
       </div>
     </div>
     
-    <!--Primeira região de conteudo-->
+    <!--Grafico Inicial-->
     <div class="grid-hero">
 
-      <div class="hero chart-wrapper">
+      <div class="hero chart-wrapper" style="width: 151%">
 
         <div class="chart-title">
           Cell Title
@@ -116,42 +116,46 @@
         <div class="chart-stage">
           <div id="grid-1-1">
             <div>
-      <canvas id="myChart" width="670" height="400"></canvas>
-      <script>
-        var ctx = document.getElementById("myChart").getContext("2d");
-        var chart = new Chart(ctx, {
-          // The type of chart we want to create
-          type: "line",
-        
-          // The data for our dataset
-          data: {
-            labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"],
-            datasets: [
-              {
-                label: "Ganhos anual",
-                backgroundColor: "transparent",
-                borderColor: "#82b4b4",
-                data: {{ganhos}}
-              }]
-        },
-// Configuration options go here
-        options: {        
-            scales: {
-                yAxes: [{
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function(value, index, values) {
-                            return float2real(value);
-                        }
-                    }
-                }]                
-            },
-            responsive:false,
-            maintainAspectRatio: false
-        }
-    });
-      </script>
+              <canvas id="myChart" width="1100" height="400"></canvas>
+              <script>
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+                gradientStroke.addColorStop(0, "#80b6f4");
+                gradientStroke.addColorStop(1, "#f49080");
+
+                var chart = new Chart(ctx, {
+                  // The type of chart we want to create
+                  type: "line",
+                
+                  // The data for our dataset
+                  data: {
+                    labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"],
+                    datasets: [
+                      {
+                        label: "Ganhos anual",
+                        backgroundColor: gradientStroke,
+                        borderColor: "#82b4b4",
+                        data: {{ganhos}}
+                      }]
+                },
+        // Configuration options go here
+                options: {        
+                    scales: {
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value, index, values) {
+                                    return float2real(value);
+                                }
+                            }
+                        }]                
+                    },
+                    responsive:false,
+                    maintainAspectRatio: false
+                }
+            });
+              </script>
             </div>
           </div>
         </div>
@@ -160,48 +164,48 @@
           Notes about this chart
         </div>
       </div>
-
-      <div class="chart-wrapper">
-        <div class="chart-title">
-          Cell Title
-        </div>
-        <div class="chart-stage">
-          <div>
-            <canvas id="myChartPie" width="400" height="400"></canvas>
-            <script>
-              var formasPag = {{formaPagamento}}
-              var ctx = document.getElementById("myChartPie").getContext("2d");
-              var chart = new Chart(ctx, {
-                // The type of chart we want to create
-                type: "pie",
-                // The data for our dataset
-                data: {
-                  labels: ["Cartão de Crédito", "Cartão de Débito", "Dinheiro"],
-                  datasets:[
-                    {
-                      label: "Forma de Pagamento",
-                      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 0, 0, 1)', 'rgba(248, 169, 120, 1)'],
-                      backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(192, 0, 0, 0.2)', 'rgba(248, 169, 120, 1)'],
-                      data: [formasPag[0], formasPag[1], formasPag[2]]
-                    }
-                  ]
-                },
-                // Configuration options go here
-                options: {
-                  responsive:false,
-                  maintainAspectRatio: false
-                }
-              });
-            </script>
-        </div>
-        </div>
-        <div class="chart-notes">
-          Notes about this chart
-        </div>
-      </div>
-
+    </div>
+<!--Grafico forma pagamento-->
+<div class="chart-wrapper">
+    <div class="chart-title">
+      Cell Title
     </div>
 
+    <div class="chart-stage">
+      <div>
+        <canvas id="myChartPie" width="300" height="300"></canvas>
+        <script>
+          var formasPag = {{formaPagamento}}
+          var ctx = document.getElementById("myChartPie").getContext("2d");
+          var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: "pie",
+            // The data for our dataset
+            data: {
+              labels: ["Cartão de Crédito", "Cartão de Débito", "Dinheiro"],
+              datasets:[
+                {
+                  label: "Forma de Pagamento",
+                  borderColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 0, 0, 1)', 'rgba(248, 169, 120, 1)'],
+                  backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(192, 0, 0, 0.2)', 'rgba(248, 169, 120, 0.2)'],
+                  data: [formasPag[0], formasPag[1], formasPag[2]]
+                }
+              ]
+            },
+            // Configuration options go here
+            options: {
+              responsive:false,
+              maintainAspectRatio: false
+            }
+          });
+        </script>
+    </div>
+    </div>
+
+    <div class="chart-notes">
+      Notes about this chart
+    </div>
+  </div>
   <!--Segunda região de conteudo-->
     <div class="chart-wrapper">
       <div class="chart-title">
