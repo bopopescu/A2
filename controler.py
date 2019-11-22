@@ -399,3 +399,9 @@ def formas_pagamento_mes(id_profissional, mes, ano):
     formas = [credito, debito, dinheiro]
     total = sum(formas)
     return formas
+
+def lista_meses(mes = datetime.now().month):
+    """Retorna uma lista com o nome dos meses até o numero do mes dado 1-12
+    valor padrão é o mes atual"""
+    lista_meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"]
+    return lista_meses[:mes]

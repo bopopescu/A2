@@ -597,15 +597,13 @@ def enviaEmail(email):
 def DashboardFinanceira():
     if "user" in session:
         profissional = Profissional(session["id"])
-
         grana_anual = profissional.ganho_anual("2019")
         atendimento_anual = profissional.atendimento_anual("2019")
         formaPagamento_anual = profissional.formaPagamento_anual("2019")
+        return render_template("DashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual)
+    return redirect(url_for("login"))
 
-        return render_template("DashboardFinanceira.html", ganhos = grana_anual, atendimentos = atendimento_anual, formaPagamento = formaPagamento_anual)
-
-
-
+# formaPagamento = formaPagamento_anual 
 if __name__ == '__main__':
     app.run(debug=True)
 
