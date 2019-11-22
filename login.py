@@ -601,8 +601,6 @@ def DashboardFinanceira():
         grana_anual = profissional.ganho_anual("2019")
         atendimento_anual = profissional.atendimento_anual("2019")
         formaPagamento_anual = profissional.formaPagamento_anual("2019")
-        grana_anual = [436, 141, 580, 105, 510, 88, 11, 223, 318, 73, 27, 319]
-        formaPagamento_anual = [7, 5, 4]
         return render_template("DashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual)
     return redirect(url_for("login"))
 

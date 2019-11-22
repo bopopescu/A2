@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Layouts &raquo; Hero-Thirds</title>
+  <title>Dashboard Financeira</title>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
 
   <!-- keen-analysis@3 -->
@@ -134,7 +134,13 @@
                       {
                         label: "Ganhos anual",
                         backgroundColor: gradientStroke,
-                        borderColor: "#82b4b4",
+                        pointBackgroundColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "#f49080",
+                        pointBorderWidth: 3,
+                        pointHoverRadius: 5,
+                        pointHoverBorderWidth: 3,
+                        borderColor: "#8b8383",
                         data: {{ganhos}}
                       }]
                 },
@@ -188,6 +194,7 @@
                   label: "Forma de Pagamento",
                   borderColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 0, 0, 1)', 'rgba(248, 169, 120, 1)'],
                   backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(192, 0, 0, 0.2)', 'rgba(248, 169, 120, 0.2)'],
+                  pointBorderColor: "#80b6f4",
                   data: [formasPag[0], formasPag[1], formasPag[2]]
                 }
               ]
