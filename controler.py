@@ -374,7 +374,7 @@ def converte_dinheiro(dinheiro):
     split = valor.split(',')
     inteiro = split[0]
     centavos = split[1]
-    grana = round(float(inteiro+'.'+centavos),2)
+    grana = round(float(inteiro+'.'+centavos),3)
     return grana
 
 def dinheiro_mes(id_profissional, mes, ano):

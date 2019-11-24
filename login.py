@@ -53,13 +53,12 @@ class Profissional(Usuario):
         return controler.dinheiro_mes(self.id, mes, ano)
 
     def atendimento_mensal(self,mes,ano):
-        """retorna o quanto o profissional ganhou no mes naquele ano"""
+        """retorna quantos atendimentos o profissional fez no mes naquele ano"""
         return len(controler.filtro_atendimentos_mes(self.id, mes, ano))
 
     def forma_pagamentoMensal(self,mes,ano):
-        """retorna o quanto o profissional ganhou no mes naquele ano"""
+        """retorna como foram os pagamentos feitos no mes naquele ano"""
         return controler.formas_pagamento_mes(self.id, mes, ano)
-
 
     def ganho_anual(self, ano):
         """Retorna uma lista com todo o ganho de todos os meses."""
@@ -601,7 +600,12 @@ def DashboardFinanceira():
         grana_anual = profissional.ganho_anual("2019")
         atendimento_anual = profissional.atendimento_anual("2019")
         formaPagamento_anual = profissional.formaPagamento_anual("2019")
-        return render_template("DashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual)
+        mes_atual = date.today().month
+        ano_atual = date.today().year
+        ganho_mes_atual = (profissional.ganho_mensal(mes_atual, ano_atual))
+        atendimento_mes_atual = profissional.atendimento_mensal(mes_atual, ano_atual)
+
+        return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual)
     return redirect(url_for("login"))
 
 # formaPagamento = formaPagamento_anual 
