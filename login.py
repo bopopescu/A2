@@ -641,7 +641,7 @@ def Relatorios():
             pdf = pdfkit.from_string(rendered, False)
             response =  make_response(pdf)
             response.headers['Content-Type'] =  'applocation/pdf'
-            response.headers['Content-Disposition'] =   'inline; filename = recibo' + nomeProfissional + '.pdf'
+            response.headers['Content-Disposition'] =   'inline; filename = Relatorio - ' + nomeProfissional + '- de '+ data_inicial + ' até ' + data_final +'.pdf'
 
             return response
 
