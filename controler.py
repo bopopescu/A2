@@ -5,17 +5,17 @@ import pdfkit
 from datetime import date, datetime, timedelta
 
 config = {
-  'user': 'sql10312877',
-  'password': 'YZBUDWdzsP',
-  'host': 'sql10.freesqldatabase.com',
-  'database': 'sql10312877',
+  'user': 'root',
+  'password': 'password',
+  'host': '127.0.0.1',
+  'database': 'waat',
   'port': '3306'}
 
 con = mysql.connector.connect(**config)
 cursor = con.cursor()
 
 def select(fields, tables, where = None):
-    global cursor
+    global cursor, con
     query = "SELECT " + fields + " FROM " +tables
     if (where):
         query += " WHERE " + where
@@ -23,7 +23,7 @@ def select(fields, tables, where = None):
     return cursor.fetchall()
 
 def select_last(id_profissional, id_cliente):
-    global cursor
+    global cursor, con
     id_profissional = str(id_profissional)
     id_cliente = str(id_cliente)
     selectionados = id_cliente+', data_consulta, '+id_profissional
@@ -36,7 +36,7 @@ def select_last(id_profissional, id_cliente):
     return cursor.fetchall()
 
 def exist(cpf, table):
-    global cursor
+    global cursor, con
     query = "SELECT COUNT(nome) FROM " + table +" WHERE cpf="+cpf;
     cursor.execute(query)
     return bool(cursor.fetchall()[0][0])
@@ -49,6 +49,9 @@ def insert(values, table, fields =None):
     query += " VALUES " + ",".join(["("+v+")" for v in values])
     cursor.execute(query)
     con.commit()
+    cursor.close()
+    con.close()
+
 
 def update(sets, table, where):
     global cursor,  con
@@ -64,6 +67,8 @@ def delete(table, where):
     query = "DELETE FROM "+ table +" WHERE "+where
     cursor.execute(query)
     con.commit()
+    cursor.close()
+    con.close()
 
 def limpa_telefone(telefone):
     if len(telefone)==14:
@@ -77,7 +82,7 @@ def limpa_telefone(telefone):
         bloco1 = telefone[4:8]
         bloco2 = telefone[9:]
         return ddd+bloco1+bloco2
-#123456789
+
 def formata_telefone(telefone):
     """Transforma um telefone vindo do bd no formato (21)1111-1111 ou (21)1111-11111"""
     if len(telefone) == 11:
@@ -219,6 +224,7 @@ def ApenasUpdate(cpf, table):
         ApenasUpdate = False #cadastro normal  
 
 def cadastra_usuario(cpf, nome, email, telefone, data_de_nascimento, senha, tipo):
+    global cursor,  con
     user_mail = separa_email(email)[0]
     domain_mail = separa_email(email)[1]
     sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -227,12 +233,14 @@ def cadastra_usuario(cpf, nome, email, telefone, data_de_nascimento, senha, tipo
     con.commit()
 
 def cadastra_cliente(id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
+    global cursor,  con
     sql = "INSERT INTO clientes (id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     data = (id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel)
     cursor.execute(sql, data)
     con.commit()
 
 def cadastra_profissional(id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado):
+    global cursor,  con
     if registro_profissional == "":
         registro_profissional = "-"
     if telefone_comercial == "":
@@ -241,20 +249,27 @@ def cadastra_profissional(id_profissional, profissao, registro_profissional, tel
     data = (id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado)
     cursor.execute(sql, data)
     con.commit()
+    cursor.close()
+    con.close()
 
 def cadastra_atendimento(id_profissional, id_cliente, valor, data_consulta, data_gerado, forma_pagamento, numero_parcelas):
+    global cursor,  con
     sql = "INSERT INTO atendimentos (id_atendimento, id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
     data = ('DEFAULT', id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas)
     cursor.execute(sql, data)
     con.commit()
 
 def cadastra_esquecimento(cpf, chave, datahora):
+    global cursor,  con
     sql = "INSERT INTO pedido_mudanca_senha (id_pedido, cpf, chave,datahora) VALUES(%s,%s,%s,%s)"
     data = ('DEFAULT', cpf, chave, datahora)
     cursor.execute(sql, data)
     con.commit()
+    cursor.close()
+    con.close()
 
 def pre_cadastra(nome, cpf, telefone, email):
+    global cursor,  con
     user_mail = separa_email(email)[0]
     domain_mail = separa_email(email)[1]
     data_de_nascimento = '-'
@@ -264,11 +279,16 @@ def pre_cadastra(nome, cpf, telefone, email):
     data = ('DEFAULT', cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
     cursor.execute(sql, data)
     con.commit()
+    cursor.close()
+    con.close()
 
 def completa_cadastro_cliente(nome, data_de_nascimento, cpf, telefone, email, senha, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
+    global cursor,  con
     id_cliente = cpf_id(cpf, 'usuarios')
     ups_usuario = {'nome':nome, 'data_de_nascimento':data_de_nascimento, 'telefone':telefone, 'email':email, 'user_mail':user_mail, 'domain_mail':domain_mail, 'senha':senha, 'cep':cep, 'endereco':endereco, 'numero':numero, 'complemento':complemento, 'cidade':cidade, 'estado':estado, 'nome_responsavel':nome_responsavel, 'cpf_responsavel':cpf_responsavel}
     update(ups_usuario,'clientes','id_cliente='+str(id_cliente))
+    cursor.close()
+    con.close()
 
 def completa_cadastro_profissional():
     pass
