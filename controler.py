@@ -421,4 +421,4 @@ def atendimentos_periodo(id_profissional, data_inicio, data_fim):
         cpf = select("cpf", "usuarios" , "id = " + id)[0][0]
         atendimento.append(cpf)
 
-    return atendimentos    
+    return atendimentos   

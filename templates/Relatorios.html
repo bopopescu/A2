@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/CadastrarAtendimentos.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="../static/styles/login.css"> -->
+
+
+    <title>Relatórios</title>
+</head>
+
+<body>
+    <i class="fa icon" style="font-size: 40px;"
+        onclick="window.location.href='{{ url_for( 'Relatorios')}}'">&#xf0a8;</i>
+    <div class="container-login100" id="container">
+        <div class="wrap-login100" id="wrap">
+            <form method="POST" id="form" style="text-align: center">
+                <h1 class="welcome">Gerar seu relatorio de atendimentos</h1>
+
+                <!-- Data inicial -->
+                <div class="inputBox">
+                    <input type="tel" id="data" name="Data inicial" placeholder="Data inicial"
+                        value="{{request.form.final}}" class="input" onblur="validaData()"
+                        oninput="this.value = DDMMYYYY(this.value, event)" maxlength="10" id="data" />
+                </div>
+
+                <!-- Data final -->
+                <div class="inputBox">
+                    <input type="tel" id="data" name="final" placeholder="Data final"
+                        value="{{request.form.final}}" class="input" onblur="validaData()"
+                        oninput="this.value = DDMMYYYY(this.value, event)" maxlength="10" id="data" />
+                </div>
+
+                {% if error %}
+                <p class="error" style="text-align: center; color: #e74c3c; font-size: 14px">{{ error }}
+                    {% endif %}
+                    <!-- Submit -->
+                    <div class="inputBox" style="padding-top: 30px; padding-bottom: 30px;">
+                        <input class="botao" type="submit" id="botao" name="botao" value="Gerar"
+                            onclick="document.getElementById('form').submit()">
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+</body>
+
+
+<script>
+    function DDMMYYYY(value, event) {
+        document.getElementById("data").className = "input";
+
+        let newValue = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+
+        const dayOrMonth = (index) => index % 2 === 1 && index < 4;
+
+        // on delete key.
+        if (!event.data) {
+            return value;
+        }
+
+        return newValue.split('').map((v, i) => dayOrMonth(i) ? v + '/' : v).join('');
+    };
+
+    function validaData() {
+        var data = document.getElementById("data").value;
+        var dia = Number(data.slice(6, 10) + data.slice(3, 5) + data.slice(0, 2))
+        var hoje = new Date()
+        hoje = Number(String(hoje.getFullYear()) + ("0" + String(hoje.getMonth() + 1)).slice(-2) + ("0" + String(hoje.getDate())).slice(-2))
+        if (data.length != 10 || dia > hoje) {
+            document.getElementById("data").className = "input cpfError";
+        }
+        else {
+            document.getElementById("data").className = "input";
+        }
+    }
+</script>
+
+
+
+</html>

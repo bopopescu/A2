@@ -596,7 +596,6 @@ def enviaEmail(email):
 def DashboardFinanceira():
     if "user" in session:
         profissional = Profissional(session["id"])
-
         grana_anual = profissional.ganho_anual("2019")
         atendimento_anual = profissional.atendimento_anual("2019")
         formaPagamento_anual = profissional.formaPagamento_anual("2019")
@@ -607,6 +606,17 @@ def DashboardFinanceira():
 
         return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual)
     return redirect(url_for("login"))
+
+@app.route("/Relatorios")
+def relatorio():
+    if "user" in session:
+        id_profissional = session["id"]
+        data_inicial = request.form["inicial"]
+        data_final = request.form["final"]
+        atendimentos = controler.atendimentos_periodo(id_profissional, data_inicial, data_final)
+        print ( atendimentos )
+    
+    return render_template("Relatorios.html")
 
 # formaPagamento = formaPagamento_anual 
 if __name__ == '__main__':
