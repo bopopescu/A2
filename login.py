@@ -607,11 +607,7 @@ def DashboardFinanceira():
         return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual)
     return redirect(url_for("login"))
 
-<<<<<<< HEAD
-@app.route('/Relatorios', methods=['GET', 'POST'])
-=======
 @app.route("/Relatorios", methods=['GET', 'POST'])
->>>>>>> f00c535243b86edf14ac223b41f69596e4354ec3
 def Relatorios():
     if "user" in session:
         if request.method == 'POST':
@@ -627,10 +623,11 @@ def Relatorios():
             data_inicial = controler.inverte_data(request.form["inicial"])
             data_final = controler.inverte_data(request.form["final"])
             atendimentos = controler.atendimentos_periodo(id_profissional, data_inicial, data_final)
-            table = '-'
+            tabela = []
             for atendimento in atendimentos:
-                table += atendimento[6]+' - '+controler.formata_cpf(atendimento[7])+' - '+atendimento[2]+' ; \n'
-            rendered = render_template('Relatorio.html', nomeProfissional = nomeProfissional, regProf = regProf, email=email, telefone=telefone, enderecoComercial=enderecoComercial, CEP=CEP, data_inicial = data_inicial, data_final = data_final, table = table)
+                tabela.append([atendimento[6], controler.formata_cpf(atendimento[7]),atendimento[2]])
+
+            rendered = render_template('Relatorio.html', nomeProfissional = nomeProfissional, regProf = regProf, email=email, telefone=telefone, enderecoComercial=enderecoComercial, CEP=CEP, data_inicial = data_inicial, data_final = data_final, tabela = tabela, lenTabela = len(tabela))
             
             pdf = pdfkit.from_string(rendered, False)
 

@@ -83,6 +83,9 @@ def limpa_telefone(telefone):
         bloco2 = telefone[9:]
         return ddd+bloco1+bloco2
 
+def formata_data(data): # 12/34/5678 <-- 5678-34-12
+    return data[8:]+'/'+data[5:7]+'/'+data[0:4]
+
 def formata_telefone(telefone):
     """Transforma um telefone vindo do bd no formato (21)1111-1111 ou (21)1111-11111"""
     if len(telefone) == 11:
