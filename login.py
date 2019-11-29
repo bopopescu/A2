@@ -607,7 +607,11 @@ def DashboardFinanceira():
         return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual)
     return redirect(url_for("login"))
 
+<<<<<<< HEAD
 @app.route('/Relatorios', methods=['GET', 'POST'])
+=======
+@app.route("/Relatorios", methods=['GET', 'POST'])
+>>>>>>> f00c535243b86edf14ac223b41f69596e4354ec3
 def Relatorios():
     if "user" in session:
         if request.method == 'POST':
