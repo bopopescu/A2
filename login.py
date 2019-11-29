@@ -602,7 +602,7 @@ def DashboardFinanceira():
         formaPagamento_anual = profissional.formaPagamento_anual("2019")
         mes_atual = date.today().month
         ano_atual = date.today().year
-        ganho_mes_atual = (profissional.ganho_mensal(mes_atual, ano_atual))
+        ganho_mes_atual = controler.converte_dinheiro((profissional.ganho_mensal(mes_atual, ano_atual)))
         atendimento_mes_atual = profissional.atendimento_mensal(mes_atual, ano_atual)
 
         return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual)
