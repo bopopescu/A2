@@ -227,8 +227,8 @@ def cadastra_usuario(cpf, nome, email, telefone, data_de_nascimento, senha, tipo
     global cursor,  con
     user_mail = separa_email(email)[0]
     domain_mail = separa_email(email)[1]
-    sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = ('DEFAULT', cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
+    sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
     cursor.execute(sql, data)
     con.commit()
 
@@ -254,15 +254,15 @@ def cadastra_profissional(id_profissional, profissao, registro_profissional, tel
 
 def cadastra_atendimento(id_profissional, id_cliente, valor, data_consulta, data_gerado, forma_pagamento, numero_parcelas):
     global cursor,  con
-    sql = "INSERT INTO atendimentos (id_atendimento, id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = ('DEFAULT', id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas)
+    sql = "INSERT INTO atendimentos (id_atendimento, id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s)"
+    data = (id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas)
     cursor.execute(sql, data)
     con.commit()
 
 def cadastra_esquecimento(cpf, chave, datahora):
     global cursor,  con
-    sql = "INSERT INTO pedido_mudanca_senha (id_pedido, cpf, chave,datahora) VALUES(%s,%s,%s,%s)"
-    data = ('DEFAULT', cpf, chave, datahora)
+    sql = "INSERT INTO pedido_mudanca_senha (id_pedido, cpf, chave,datahora) VALUES(DEFAULT,%s,%s,%s)"
+    data = (cpf, chave, datahora)
     cursor.execute(sql, data)
     con.commit()
     cursor.close()
@@ -275,8 +275,8 @@ def pre_cadastra(nome, cpf, telefone, email):
     data_de_nascimento = '-'
     senha = '-'
     tipo = 0
-    sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = ('DEFAULT', cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
+    sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
     cursor.execute(sql, data)
     con.commit()
     cursor.close()
