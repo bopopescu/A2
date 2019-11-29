@@ -391,9 +391,9 @@ def filtro_atendimentos_mes(id_profissional, mes, ano):
 def converte_dinheiro(dinheiro):
     valor = dinheiro[2:]
     split = valor.split(',')
-    inteiro = split[0]
-    centavos = split[1]
-    grana = round(float(inteiro+'.'+centavos),3)
+    inteiro = float(split[0])
+    centavos = (float(split[1][0:2]))/100
+    grana = (inteiro+centavos)
     return grana
 
 def dinheiro_mes(id_profissional, mes, ano):
@@ -424,3 +424,21 @@ def lista_meses(mes = datetime.now().month):
     valor padrão é o mes atual"""
     lista_meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"]
     return lista_meses[:mes]
+
+def atendimentos_periodo(id_profissional, data_inicio, data_fim):
+    global cursor
+    query = "SELECT * FROM atendimentos WHERE id_profissional=" + str(id_profissional)+ " AND data_consulta between '" + data_inicio + "' AND '" + data_fim + "'"
+    cursor.execute(query)
+    atendimentos_periodo = cursor.fetchall()
+    atendimentos = []
+    for atendimento in atendimentos_periodo:
+        atendimentos.append([atendimento[0],atendimento[2],atendimento[3],atendimento[4],atendimento[6],atendimento[7]])
+
+    for atendimento in atendimentos:
+        id = str(atendimento[1])
+        nome = select("nome", "usuarios", "id = "+id)[0][0]
+        atendimento.append(nome)
+        cpf = select("cpf", "usuarios" , "id = " + id)[0][0]
+        atendimento.append(cpf)
+
+    return atendimentos   
