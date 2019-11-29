@@ -4,17 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Relatorio</title>
-    <!-- <link href="css/estilos.css" rel="stylesheet"> -->
     <style>
 
-    #div1{
-      width:1000px;
-      height:915px;
-      border:solid 2px;
-      border-radius:10px;
+    #container{
+    width: 100%;
+    height: 99%;
+    border:solid 2px;
+    border-radius:10px;
+    position: relative;
+    }
+    
+    #table, th, td {
+    text-align: center;
+    margin-right: margin-left;
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+    }
+
+    #rodape {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    margin-left: 30%;
     }
     </style>
-
 </head>
 
 
@@ -22,59 +36,62 @@
 <body>
 
 
-  <div id="div1">
-      </div>
+  <div id="container">
 
     <div id="site">
 
-
         <div id="conteudo">
             <div id="conteudo-principal">
+            <h1>
+                    <center><b>RELATÓRIO</b></center>
+            </h1>
 
-                <h1>
-                    <center>{{nomeProfissional}}</center>
-                    <h1>
-                        <center>Registro Profissional: {{regProf}}</center>
-                    </h1><br /><br /><br />
-                    <h1>
-                        <center>RELATÓRIO</center>
-                    </h1>
-                    <h2>
-                        <center>Seus atendimentos de {{data_inicial}} até {{data_final}}.</center>
-                    </h2>
+            <h1>
+                <center>{{nomeProfissional}}</center>
+            </h1>
+            <h3>
+                <center>Registro Profissional: {{regProf}}</center>
 
-                    <p>
-                        <center> {{table}}<br />
-                        </center>
-                    </p>
-                    <p><br /><br /><br /><br />
-                      <!--  <center id="data"> Rio de Janeiro, {{data}}</center> -->
-                    </p>
+            </h3>
 
+            <br>
 
+            <h2>
+                <center>Atendimentos de {{data_inicial}} até {{data_final}}</center>
+            </h2>
+
+            <div class="wrap-login100" id="wrap">
+                <table id="table" style="margin-left: 14%;">
+                    <tr>
+                        <th>Nome do cliente</th>
+                        <th>CPF</th>
+                        <th>Valor</th>
+                    </tr>
+
+                    {% if lenTabela == 0 %}
+                        <tr>
+                            <td style="width: 1000px">Você não tem atendimentos nesse período</td>
+                        </tr>
+                    {% else %}
+                    {% for dado in tabela %}
+                        <tr>
+                            <td style="width: 50%">{{dado[0]}}</td>
+                            <td style="width: 20%">{{dado[1]}}</td>
+                            <td style="width: 20%">{{dado[2]}}</td>
+                        </tr>
+                    {% endfor %}
+                    {% endif %}
+                </table>
             </div>
 
-        </div><br /><br /><br /><br />
+
         <div id="rodape">
-            <p id="telefone-email">
-                {{email}}
-                <br>
-                 {{telefone}}
-            </p>
-
-            <p id="endereco">
-                {{enderecoComercial}}
-                <br>
-                {{CEP}}
-                <br>
-
-            </p>
-        
-            <small id="copyright">
-                &copy; WAAT Ltda. Todos os Direitos Reservados.
-            </small>
+            <p id="telefone-email">{{email}} - {{telefone}}</p>
+            <p id="endereco">{{enderecoComercial}}, {{numero}}, {{cidade}}, {{estado}}, {{CEP}}</p>
+            <small id="copyright"> &copy; A² Ltda. Todos os Direitos Reservados.</small>
         </div>
     </div>
+  </div>
 
     <script>
         var hoje = new Date();

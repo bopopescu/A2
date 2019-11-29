@@ -83,12 +83,16 @@ def limpa_telefone(telefone):
         bloco2 = telefone[9:]
         return ddd+bloco1+bloco2
 
-def formata_telefone(telefone):
-    """Transforma um telefone vindo do bd no formato (21)1111-1111 ou (21)1111-11111"""
+def formata_data(data): # 12/34/5678 <-- 5678-34-12
+    return data[8:]+'/'+data[5:7]+'/'+data[0:4]
+
+def formata_telefone(telefone): # 21964011311 - (21) 96401-1311
+    """Transforma um telefone vindo do bd no formato (21)1111-1111 ou (21)11111-1111"""
     if len(telefone) == 11:
         telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:7], telefone[7:])
     else:
         telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:6], telefone[6:])
+    return telefone
 
 def formata_cpf(cpf): # 00000000000 -> 000.000.000-00
     return cpf[0:3]+'.'+cpf[3:6]+'.'+cpf[6:9]+'-'+cpf[9:]

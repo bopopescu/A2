@@ -616,18 +616,21 @@ def Relatorios():
             email = profissional.email #
             telefone = profissional.telefone_comercial #
             enderecoComercial = profissional.endereco #
+            numero = profissional.numero #
+            cidade = profissional.cidade #
+            estado = profissional.estado #
             CEP = profissional.cep #
 
             data_inicial = controler.inverte_data(request.form["inicial"])
             data_final = controler.inverte_data(request.form["final"])
             atendimentos = controler.atendimentos_periodo(id_profissional, data_inicial, data_final)
-            table = '-'
+            tabela = []
             for atendimento in atendimentos:
-                table += atendimento[6]+' - '+controler.formata_cpf(atendimento[7])+' - '+atendimento[2]+' ; \n'
-            rendered = render_template('Relatorio.html', nomeProfissional = nomeProfissional, regProf = regProf, email=email, telefone=telefone, enderecoComercial=enderecoComercial, CEP=CEP, data_inicial = data_inicial, data_final = data_final, table = table)
-            
-            pdf = pdfkit.from_string(rendered, False)
+                tabela.append([atendimento[6], controler.formata_cpf(atendimento[7]),atendimento[2]])
 
+            rendered = render_template('Relatorio.html', nomeProfissional = nomeProfissional, regProf = regProf, email=email, telefone=controler.formata_telefone(telefone), enderecoComercial=enderecoComercial, numero=numero, cidade=cidade, estado=estado, CEP=CEP, data_inicial = controler.formata_data(data_inicial), data_final = controler.formata_data(data_final), tabela = tabela, lenTabela = len(tabela))
+
+            pdf = pdfkit.from_string(rendered, False)
             response =  make_response(pdf)
             response.headers['Content-Type'] =  'applocation/pdf'
             response.headers['Content-Disposition'] =   'inline; filename = recibo' + nomeProfissional + '.pdf'
