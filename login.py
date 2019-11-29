@@ -608,15 +608,15 @@ def DashboardFinanceira():
     return redirect(url_for("login"))
 
 @app.route("/Relatorios")
-def relatorio():
+def Relatorios():
     if "user" in session:
-        id_profissional = session["id"]
-        data_inicial = request.form["inicial"]
-        data_final = request.form["final"]
-        atendimentos = controler.atendimentos_periodo(id_profissional, data_inicial, data_final)
-        print ( atendimentos )
-    
-    return render_template("Relatorios.html")
+        if request.method == 'POST':
+            id_profissional = session["id"]
+            data_inicial = request.form["inicial"]
+            data_final = request.form["final"]
+            atendimentos = controler.atendimentos_periodo(id_profissional, data_inicial, data_final)
+        return render_template("Relatorios.html")
+    return redirect(url_for("login"))
 
 # formaPagamento = formaPagamento_anual 
 if __name__ == '__main__':
