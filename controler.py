@@ -90,6 +90,9 @@ def formata_telefone(telefone):
     else:
         telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:6], telefone[6:])
 
+def formata_cpf(cpf): # 00000000000 -> 000.000.000-00
+    return cpf[0:3]+'.'+cpf[3:6]+'.'+cpf[6:9]+'-'+cpf[9:]
+
 def limpa_cpf(cpf):
     '''Limpa o CPF, tirando ponto e traço'''
     first = cpf[:3]
@@ -372,6 +375,9 @@ def converte_data(data):
     data = date(ano, mes, dia)
     return data
 
+def inverte_data(data): # 12/34/5678 -> 5678-34-12
+    return data[6:]+'-'+data[3:5]+'-'+data[0:2]
+
 def ultima_consulta(id_profissional,id_cliente):
     """
     """
@@ -402,6 +408,8 @@ def dinheiro_mes(id_profissional, mes, ano):
     for atendimento in atendimentos:
         grana+=converte_dinheiro(atendimento[3])
     return grana
+
+
 
 def formas_pagamento_mes(id_profissional, mes, ano):
     credito = 0

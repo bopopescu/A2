@@ -1,0 +1,135 @@
+<html lang="pt-BR">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Relatorio</title>
+    <!-- <link href="css/estilos.css" rel="stylesheet"> -->
+    <style>
+
+    #div1{
+      width:1000px;
+      height:915px;
+      border:solid 2px;
+      border-radius:10px;
+    }
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+  <div id="div1">
+      </div>
+
+    <div id="site">
+
+
+        <div id="conteudo">
+            <div id="conteudo-principal">
+
+                <h1>
+                    <center>{{nomeProfissional}}</center>
+                    <h1>
+                        <center>Registro Profissional: {{regProf}}</center>
+                    </h1><br /><br /><br />
+                    <h1>
+                        <center>RELATÓRIO</center>
+                    </h1>
+                    <h2>
+                        <center>Seus atendimentos de {{data_inicial}} até {{data_final}}.</center>
+                    </h2>
+
+                    <p>
+                        <center> {{table}}<br />
+                        </center>
+                    </p>
+                    <p><br /><br /><br /><br />
+                      <!--  <center id="data"> Rio de Janeiro, {{data}}</center> -->
+                    </p>
+
+
+            </div>
+
+        </div><br /><br /><br /><br />
+        <div id="rodape">
+            <p id="telefone-email">
+                {{email}}
+                <br>
+                 {{telefone}}
+            </p>
+
+            <p id="endereco">
+                {{enderecoComercial}}
+                <br>
+                {{CEP}}
+                <br>
+
+            </p>
+        
+            <small id="copyright">
+                &copy; WAAT Ltda. Todos os Direitos Reservados.
+            </small>
+        </div>
+    </div>
+
+    <script>
+        var hoje = new Date();
+        var dia = hoje.getDate();
+        var mes = hoje.getMonth() + 1;
+        var ano = hoje.getFullYear();
+        var mesE;
+
+        switch (mes) {
+            case 1:
+                mesE = "Janeiro";
+                break;
+            case 2:
+                mesE = "Fevereiro";
+                break;
+            case 3:
+                mesE = "Março";
+                break;
+            case 4:
+                mesE = "Abril";
+                break;
+            case 5:
+                mesE = "Maio";
+                break;
+            case 6:
+                mesE = "Junho";
+                break;
+            case 7:
+                mesE = "Julho";
+                break;
+            case 8:
+                mesE = "Agosto";
+                break;
+            case 9:
+                mesE = "Setembro";
+                break;
+            case 10:
+                mesE = "Outubro";
+                break;
+            case 11:
+                mesE = "Novembro";
+                break;
+            case 12:
+                mesE = "Dezembro";
+                break;
+
+
+        }
+
+        var data = "Rio de Janeiro, " + dia.toString() + " de " + mesE + " de " + ano.toString();
+
+        document.getElementById("data").innerHTML = data;
+        console.log(data)
+    </script>
+</div>
+</body>
+
+</html>
