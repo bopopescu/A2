@@ -8,10 +8,19 @@
     <style>
 
     #div1{
-      width:1000px;
-      height:915px;
+      width: 100%;
+      height: 99%;
       border:solid 2px;
       border-radius:10px;
+    }
+
+    #table, th, td {
+    width: 60%;
+    text-align: center;
+    margin-left:20%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
     }
     </style>
 
@@ -23,30 +32,55 @@
 
 
   <div id="div1">
-      </div>
+      
 
     <div id="site">
 
 
         <div id="conteudo">
             <div id="conteudo-principal">
+                <h1>
+                        <center><b>RELATÓRIO</b></center>
+                </h1>
 
                 <h1>
                     <center>{{nomeProfissional}}</center>
-                    <h1>
-                        <center>Registro Profissional: {{regProf}}</center>
-                    </h1><br /><br /><br />
-                    <h1>
-                        <center>RELATÓRIO</center>
-                    </h1>
-                    <h2>
-                        <center>Seus atendimentos de {{data_inicial}} até {{data_final}}.</center>
-                    </h2>
+                </h1>
+                <h3>
+                    <center>Registro Profissional: {{regProf}}</center>
+                    
+                </h3>
 
-                    <p>
-                        <center> {{table}}<br />
-                        </center>
-                    </p>
+                <br>
+
+                <h2>
+                    <center>Seus atendimentos de {{data_inicial}} até {{data_final}}.</center>
+                </h2>
+
+                <div class="wrap-login100" id="wrap">
+                    <table id="table">
+                        <tr>
+                            <th>Nome do cliente</th>
+                            <th>CPF</th>
+                            <th>Valor</th>
+                        </tr>
+                        
+                        {% if lenTabela == 0 %}
+                            <tr>
+                                <td style="width: 1000px">Você não tem atendimentos nesse período</td>
+                            </tr>
+                        {% else %}
+                        {% for dado in tabela %}
+                            <tr>
+                                <td>{{dado[0]}}</td>
+                                <td>{{dado[1]}}</td>
+                                <td>{{dado[2]}}</td>
+                            </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+
                     <p><br /><br /><br /><br />
                       <!--  <center id="data"> Rio de Janeiro, {{data}}</center> -->
                     </p>
@@ -58,23 +92,23 @@
         <div id="rodape">
             <p id="telefone-email">
                 {{email}}
-                <br>
-                 {{telefone}}
+                -
+                {{telefone}}
             </p>
 
             <p id="endereco">
                 {{enderecoComercial}}
-                <br>
+                -
                 {{CEP}}
                 <br>
-
             </p>
         
             <small id="copyright">
-                &copy; WAAT Ltda. Todos os Direitos Reservados.
+                &copy; A² Ltda. Todos os Direitos Reservados.
             </small>
         </div>
     </div>
+</div>
 
     <script>
         var hoje = new Date();
