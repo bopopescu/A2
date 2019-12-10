@@ -15,60 +15,116 @@ con = mysql.connector.connect(**config)
 cursor = con.cursor()
 
 def select(fields, tables, where = None):
-    global cursor, con
-    query = "SELECT " + fields + " FROM " +tables
-    if (where):
-        query += " WHERE " + where
-    cursor.execute(query)
-    return cursor.fetchall()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "SELECT " + fields + " FROM " +tables
+        if (where):
+            query += " WHERE " + where
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        con.close()
+
 
 def select_last(id_profissional, id_cliente):
-    global cursor, con
-    id_profissional = str(id_profissional)
-    id_cliente = str(id_cliente)
-    selectionados = id_cliente+', data_consulta, '+id_profissional
-    query = "id_cliente = "+id_cliente+ " and id_profissional = " + id_profissional + " FROM atendimentos"
-    loc = select("MAX(data_consulta)","atendimentos", "id_cliente = "+id_cliente +" and id_profissional = "+id_profissional)
-    query+= "data_consulta = " + str(loc[0][0])
-    query+=  "ORDER BY id_cliente, data_consulta;"
-    select(selectionados, "atendimentos", )
-    cursor.execute(query)
-    return cursor.fetchall()
-
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        id_profissional = str(id_profissional)
+        id_cliente = str(id_cliente)
+        selectionados = id_cliente+', data_consulta, '+id_profissional
+        query = "id_cliente = "+id_cliente+ " and id_profissional = " + id_profissional + " FROM atendimentos"
+        loc = select("MAX(data_consulta)","atendimentos", "id_cliente = "+id_cliente +" and id_profissional = "+id_profissional)
+        query+= "data_consulta = " + str(loc[0][0])
+        query+=  "ORDER BY id_cliente, data_consulta;"
+        select(selectionados, "atendimentos", )
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        con.close()
+        
 def exist(cpf, table):
-    global cursor, con
-    query = "SELECT COUNT(nome) FROM " + table +" WHERE cpf="+cpf;
-    cursor.execute(query)
-    return bool(cursor.fetchall()[0][0])
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "SELECT COUNT(nome) FROM " + table +" WHERE cpf="+cpf;
+        cursor.execute(query)
+        return bool(cursor.fetchall()[0][0])
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def insert(values, table, fields =None):
-    global cursor,  con
-    query = "INSERT INTO " +table
-    if (fields):
-        query += " ("+ fields + ") "
-    query += " VALUES " + ",".join(["("+v+")" for v in values])
-    cursor.execute(query)
-    con.commit()
-    cursor.close()
-    con.close()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "INSERT INTO " +table
+        if (fields):
+            query += " ("+ fields + ") "
+        query += " VALUES " + ",".join(["("+v+")" for v in values])
+        cursor.execute(query)
+        con.commit()
+        
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 
 def update(sets, table, where):
-    global cursor,  con
-    query = "UPDATE " +table
-    query += " SET " + ",".join([field+ " = '" + value + "'" for field, value in sets.items()])
-    if (where):
-        query += " WHERE " + where
-    cursor.execute(query)
-    con.commit()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "UPDATE " +table
+        query += " SET " + ",".join([field+ " = '" + value + "'" for field, value in sets.items()])
+        if (where):
+            query += " WHERE " + where
+        cursor.execute(query)
+        con.commit()
+    except Exception as e:
+        print(e)
+
+    finally:
+        cursor.close()
+        con.close()
 
 def delete(table, where):
-    global cursor,  con
-    query = "DELETE FROM "+ table +" WHERE "+where
-    cursor.execute(query)
-    con.commit()
-    cursor.close()
-    con.close()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "DELETE FROM "+ table +" WHERE "+where
+        cursor.execute(query)
+        con.commit()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def limpa_telefone(telefone):
     if len(telefone)==14:
@@ -234,93 +290,172 @@ def ApenasUpdate(cpf, table):
         ApenasUpdate = False #cadastro normal  
 
 def cadastra_usuario(cpf, nome, email, telefone, data_de_nascimento, senha, tipo):
-    global cursor,  con
-    user_mail = separa_email(email)[0]
-    domain_mail = separa_email(email)[1]
-    sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
-    cursor.execute(sql, data)
-    con.commit()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        user_mail = separa_email(email)[0]
+        domain_mail = separa_email(email)[1]
+        sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
+        cursor.execute(sql, data)
+        con.commit()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def cadastra_cliente(id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
-    global cursor,  con
-    sql = "INSERT INTO clientes (id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = (id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel)
-    cursor.execute(sql, data)
-    con.commit()
-
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        sql = "INSERT INTO clientes (id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_cliente, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel)
+        cursor.execute(sql, data)
+        con.commit()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 def cadastra_profissional(id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado):
-    global cursor,  con
-    if registro_profissional == "":
-        registro_profissional = "-"
-    if telefone_comercial == "":
-        telefone_comercial == ""
-    sql = "INSERT INTO profissionais (id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = (id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado)
-    cursor.execute(sql, data)
-    con.commit()
-    cursor.close()
-    con.close()
-
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        if registro_profissional == "":
+            registro_profissional = "-"
+        if telefone_comercial == "":
+            telefone_comercial == ""
+        sql = "INSERT INTO profissionais (id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado)
+        cursor.execute(sql, data)
+        con.commit()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 def cadastra_atendimento(id_profissional, id_cliente, valor, data_consulta, data_gerado, forma_pagamento, numero_parcelas):
-    global cursor,  con
-    sql = "INSERT INTO atendimentos (id_atendimento, id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s)"
-    data = (id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas)
-    cursor.execute(sql, data)
-    con.commit()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        sql = "INSERT INTO atendimentos (id_atendimento, id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_profissional, id_cliente, valor, data_consulta, data_gerado,forma_pagamento, numero_parcelas)
+        cursor.execute(sql, data)
+        con.commit()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def cadastra_esquecimento(cpf, chave, datahora):
-    global cursor,  con
-    sql = "INSERT INTO pedido_mudanca_senha (id_pedido, cpf, chave,datahora) VALUES(DEFAULT,%s,%s,%s)"
-    data = (cpf, chave, datahora)
-    cursor.execute(sql, data)
-    con.commit()
-    cursor.close()
-    con.close()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        sql = "INSERT INTO pedido_mudanca_senha (id_pedido, cpf, chave,datahora) VALUES(DEFAULT,%s,%s,%s)"
+        data = (cpf, chave, datahora)
+        cursor.execute(sql, data)
+        con.commit()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        con.close()
 
 def pre_cadastra(nome, cpf, telefone, email):
-    global cursor,  con
-    user_mail = separa_email(email)[0]
-    domain_mail = separa_email(email)[1]
-    data_de_nascimento = '-'
-    senha = '-'
-    tipo = 0
-    sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
-    cursor.execute(sql, data)
-    con.commit()
-    cursor.close()
-    con.close()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        user_mail = separa_email(email)[0]
+        domain_mail = separa_email(email)[1]
+        data_de_nascimento = '-'
+        senha = '-'
+        tipo = 0
+        sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
+        cursor.execute(sql, data)
+        con.commit()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def completa_cadastro_cliente(nome, data_de_nascimento, cpf, telefone, email, senha, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
-    global cursor,  con
-    id_cliente = cpf_id(cpf, 'usuarios')
-    ups_usuario = {'nome':nome, 'data_de_nascimento':data_de_nascimento, 'telefone':telefone, 'email':email, 'user_mail':user_mail, 'domain_mail':domain_mail, 'senha':senha, 'cep':cep, 'endereco':endereco, 'numero':numero, 'complemento':complemento, 'cidade':cidade, 'estado':estado, 'nome_responsavel':nome_responsavel, 'cpf_responsavel':cpf_responsavel}
-    update(ups_usuario,'clientes','id_cliente='+str(id_cliente))
-    cursor.close()
-    con.close()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        id_cliente = cpf_id(cpf, 'usuarios')
+        ups_usuario = {'nome':nome, 'data_de_nascimento':data_de_nascimento, 'telefone':telefone, 'email':email, 'user_mail':user_mail, 'domain_mail':domain_mail, 'senha':senha, 'cep':cep, 'endereco':endereco, 'numero':numero, 'complemento':complemento, 'cidade':cidade, 'estado':estado, 'nome_responsavel':nome_responsavel, 'cpf_responsavel':cpf_responsavel}
+        update(ups_usuario,'clientes','id_cliente='+str(id_cliente))
+    except Exception as e:
+        print(e)    
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def completa_cadastro_profissional():
     pass
 
 
 def select_CursorDict(fields, tables, where = None):
-    cursor = con.cursor(dictionary = True) 
-
-    query = "SELECT " + fields + " FROM " +tables
-
-    if (where):
-        query += " WHERE " + where
-    cursor.execute(query)
-    return cursor.fetchall()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        cursor = con.cursor(dictionary = True) 
+        query = "SELECT " + fields + " FROM " +tables
+        if (where):
+            query += " WHERE " + where
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def verifica_email(email, table):
-    lista_DomainUser = str.split(email, '@')
-    user_mail = "'"+ lista_DomainUser[0] +"'"
-    domain_mail = "'" +lista_DomainUser[1]+"'"
-    query = "select count(user_mail) from {} where domain_mail = {} and user_mail = {} ;".format(table, domain_mail, user_mail)
-    cursor.execute(query)
-    return bool(cursor.fetchall()[0][0])
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        lista_DomainUser = str.split(email, '@')
+        user_mail = "'"+ lista_DomainUser[0] +"'"
+        domain_mail = "'" +lista_DomainUser[1]+"'"
+        query = "select count(user_mail) from {} where domain_mail = {} and user_mail = {} ;".format(table, domain_mail, user_mail)
+        cursor.execute(query)
+        return bool(cursor.fetchall()[0][0])
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def valida_data(data):
     '''Checa se a data inserida é maior que a data atual, logo é inválida'''
@@ -377,9 +512,9 @@ def converte_data(data):
         dia = int(dia[1])
     else:
         dia = int(dia)
-    mes = int(data[3:5])
-    ano = int(data[6:])
-    data = date(ano, mes, dia)
+        mes = int(data[3:5])
+        ano = int(data[6:])
+        data = date(ano, mes, dia)
     return data
 
 def inverte_data(data): # 12/34/5678 -> 5678-34-12
@@ -388,18 +523,38 @@ def inverte_data(data): # 12/34/5678 -> 5678-34-12
 def ultima_consulta(id_profissional,id_cliente):
     """
     """
-    global cursor
-    id_cliente = str(id_cliente)
-    id_profissional = str(id_profissional)
-    query = str.format("SELECT MAX(data_consulta) FROM atendimentos WHERE id_cliente = {} and id_profissional = {}", id_cliente, id_profissional)
-    cursor.execute(query)
-    return cursor.fetchall()[0][0]
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        id_cliente = str(id_cliente)
+        id_profissional = str(id_profissional)
+        query = str.format("SELECT MAX(data_consulta) FROM atendimentos WHERE id_cliente = {} and id_profissional = {}", id_cliente, id_profissional)
+        cursor.execute(query)
+        return cursor.fetchall()[0][0]
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def filtro_atendimentos_mes(id_profissional, mes, ano):
-    global cursor
-    query = "SELECT * FROM atendimentos WHERE month(data_consulta)=" + str(mes) + " AND year(data_consulta)=" +str(ano) +" AND  id_profissional=" + str(id_profissional)
-    cursor.execute(query)
-    return cursor.fetchall()
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "SELECT * FROM atendimentos WHERE month(data_consulta)=" + str(mes) + " AND year(data_consulta)=" +str(ano) +" AND  id_profissional=" + str(id_profissional)
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
 
 def converte_dinheiro(dinheiro):
     valor = dinheiro[2:]
@@ -409,7 +564,6 @@ def converte_dinheiro(dinheiro):
     grana = round(float(inteiro+'.'+centavos),2)
     return grana
 
-print(converte_dinheiro('R$100,00'))
 
 def dinheiro_mes(id_profissional, mes, ano):
     atendimentos = filtro_atendimentos_mes(id_profissional, mes, ano)
@@ -443,19 +597,30 @@ def lista_meses(mes = datetime.now().month):
     return lista_meses[:mes]
 
 def atendimentos_periodo(id_profissional, data_inicio, data_fim):
-    global cursor,  con
-    query = "SELECT * FROM atendimentos WHERE id_profissional=" + str(id_profissional)+ " AND data_consulta between '" + data_inicio + "' AND '" + data_fim + "'"
-    cursor.execute(query)
-    atendimentos_periodo = cursor.fetchall()
-    atendimentos = []
-    for atendimento in atendimentos_periodo:
-        atendimentos.append([atendimento[0],atendimento[2],atendimento[3],atendimento[4],atendimento[6],atendimento[7]])
+    con = None
+    cursor = None
+    try:
+        con = mysql.connector.connect(**config)
+        cursor = con.cursor()
+        query = "SELECT * FROM atendimentos WHERE id_profissional=" + str(id_profissional)+ " AND data_consulta between '" + data_inicio + "' AND '" + data_fim + "'"
+        cursor.execute(query)
+        atendimentos_periodo = cursor.fetchall()
+        atendimentos = []
+        for atendimento in atendimentos_periodo:
+            atendimentos.append([atendimento[0],atendimento[2],atendimento[3],atendimento[4],atendimento[6],atendimento[7]])
 
-    for atendimento in atendimentos:
-        id = str(atendimento[1])
-        nome = select("nome", "usuarios", "id = "+id)[0][0]
-        atendimento.append(nome)
-        cpf = select("cpf", "usuarios" , "id = " + id)[0][0]
-        atendimento.append(cpf)
+        for atendimento in atendimentos:
+            id = str(atendimento[1])
+            nome = select("nome", "usuarios", "id = "+id)[0][0]
+            atendimento.append(nome)
+            cpf = select("cpf", "usuarios" , "id = " + id)[0][0]
+            atendimento.append(cpf)
 
-    return atendimentos   
+        return atendimentos
+
+    except Exception as e:
+        print(e)
+        
+    finally:
+        cursor.close()
+        con.close()
