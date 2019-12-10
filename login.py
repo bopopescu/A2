@@ -109,7 +109,7 @@ def cadastro():
             telefone = controler.limpa_telefone(request.form["telefone"])
             email = request.form["email"]
             senha = request.form["senha"]
-            cep=request.form["cep"]
+            cep = request.form["cep"]
             endereco = request.form["endereco"]
             numero = request.form["numero"]
             if request.form["complemento"]=="":
@@ -146,7 +146,7 @@ def cadastro():
                         tipo=1
                         controler.cadastra_usuario(cpf, nome, email, telefone, controler.converte_data(data_de_nascimento), hashed_password, tipo)
                         id_cliente = controler.select("id", "usuarios", "cpf="+str(cpf))[0][0]
-                        controler.cadastra_cliente(id_cliente,cep,endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
+                        controler.cadastra_cliente(id_cliente,limpa_cep(cep),endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
                         return redirect(url_for('login'))
                     
                     else: #menor de idade
@@ -160,7 +160,7 @@ def cadastro():
                             tipo=1
                             controler.cadastra_usuario(cpf, nome, email, telefone, controler.converte_data(data_de_nascimento), hashed_password, tipo)
                             id_cliente = controler.select("id", "usuarios", "cpf="+str(cpf))[0][0]
-                            controler.cadastra_cliente(id_cliente,cep,endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
+                            controler.cadastra_cliente(id_cliente,limpa_cep(cep),endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
                             return redirect(url_for('login'))
 
         if request.form["radio"] == '1': #profissional
@@ -327,6 +327,28 @@ def RecibosProfissional():
 
             return response
 
+        if "enviarEmail" in dicInvertido:
+            index = int(dicInvertido["enviarEmail"])
+            id_atendimento = str(recibosNew[index][0])
+            cliente = Cliente(controler.cliente_atendido(id_atendimento))
+
+            msg = Message("Recibo", recipients=[cliente.email])
+            #msg.body= "Segue em anexo o recibo referente à sua consulta."
+            rendered = controler.gerar_pdf(id_atendimento)
+            msg.html = rendered
+            mail.send(msg)
+            '''
+
+            pdf = pdfkit.from_string(rendered, False)
+
+            response =  make_response(pdf)
+            response.headers['Content-Type'] =  'applocation/pdf'
+            response.headers['Content-Disposition'] =   'inline; filename = recibo' + id_atendimento + '.pdf'
+
+            with app.open_resource(recibo_gerado) as recibo:
+                msg.attach(recibo, "application/pdf", recibo.read())
+            mail.send(msg) '''
+
     return render_template('RecibosProfissional.html', recibos=recibosNew, lenRecibos = len(recibosNew))
 
 @app.route('/recibosCliente', methods=['GET', 'POST'])
@@ -368,7 +390,6 @@ def RecibosCliente():
             index = int(dicInvertido["Baixar recibo"])
             id_atendimento = str(recibosNew[index][0])
             rendered = controler.gerar_pdf(id_atendimento)
-
             pdf = pdfkit.from_string(rendered, False)
 
             response =  make_response(pdf)

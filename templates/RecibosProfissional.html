@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/RecibosProfissional.css') }}">
     <!-- <link rel="stylesheet" type="text/css" href="../static/styles/login.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    
+
 
 
     <title>Recibos</title>
@@ -44,6 +47,7 @@
                             <th>Recibo</th>
                             <th>Cliente</th>
                             <th>Valor</th>
+                            <th>Enviar para o cliente</th>
                         </tr>
                     </table>
                     <div style="overflow: scroll;max-height: 60vh;background: #fff;">
@@ -63,6 +67,9 @@
                                 </td>
                                 <td>{{recibo[8]}}</td>
                                 <td>{{recibo[3]}}</td>
+                                <td>
+                                    <button type="submit" class = "fas fa-paper-plane" name={{recibos.index(recibo)}} value="enviarEmail"></button>
+                                </td>
 
                             </tr>
                             {% endfor %}

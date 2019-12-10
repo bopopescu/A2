@@ -126,82 +126,6 @@ def delete(table, where):
         cursor.close()
         con.close()
 
-def limpa_telefone(telefone):
-    if len(telefone)==14:
-        ddd = telefone[1:3]
-        bloco5 = telefone[4:9]
-        bloco4 = telefone[10:]
-        return ddd+bloco5+bloco4
-    
-    if len(telefone)==13:
-        ddd = telefone[1:3]
-        bloco1 = telefone[4:8]
-        bloco2 = telefone[9:]
-        return ddd+bloco1+bloco2
-
-def formata_cep(cep):
-    return cep[0:2]+'.'+cep[2:5]+'-'+cep[5:]
-
-def formata_data(data): # 12/34/5678 <-- 5678-34-12
-    return data[8:]+'/'+data[5:7]+'/'+data[0:4]
-
-def formata_telefone(telefone): # 21964011311 - (21) 96401-1311
-    """Transforma um telefone vindo do bd no formato (21)1111-1111 ou (21)11111-1111"""
-    if len(telefone) == 11:
-        telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:7], telefone[7:])
-    else:
-        telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:6], telefone[6:])
-    return telefone
-
-def formata_cpf(cpf): # 00000000000 -> 000.000.000-00
-    return cpf[0:3]+'.'+cpf[3:6]+'.'+cpf[6:9]+'-'+cpf[9:]
-
-def limpa_cpf(cpf):
-    '''Limpa o CPF, tirando ponto e traço'''
-    first = cpf[:3]
-    second = cpf[4:7]
-    third = cpf[8:11]
-    final =cpf[12:]
-    return first+second+third+final
-
-def valida_cpf(cpf):
-    '''Faz a validação do cpf inserido. Retorna True se for válido e False se for inválido'''
-    cpf_limpo = limpa_cpf(cpf)
-
-    digitos=[]
-    for i in range (0, 11):
-        digitos.append(int(cpf_limpo[i]))
-    
-    primeiro_validador = 0
-    for i in range (0, 9):
-        buffer = (10-i)*digitos[i]
-        primeiro_validador += buffer
-    primeiro_resto = primeiro_validador%11    
-
-    if primeiro_resto<2:
-        primeiro_digito = 0
-    else:
-        primeiro_digito = 11-primeiro_resto
-    
-    if primeiro_digito != digitos[9]:
-        return False
-
-    segundo_validador=0
-
-    for i in range (0, 10):
-        buffer = (11-i)*digitos[i]
-        segundo_validador += buffer
-    segundo_resto = segundo_validador%11
-
-    if segundo_resto<2:
-        segundo_digito=0
-    else:
-        segundo_digito = 11-segundo_resto
-
-    if segundo_digito != digitos[10]:
-        return False
-
-    return True
 
 def verifica_id_cliente(id):
     """retorna True se o id_cliente já está cadastrado e False c.c."""
@@ -624,3 +548,88 @@ def atendimentos_periodo(id_profissional, data_inicio, data_fim):
     finally:
         cursor.close()
         con.close()
+
+def cliente_atendido(id_atendimento):
+    return select('id_cliente','atendimentos','id_atendimento = '+id_atendimento)[0][0]
+
+
+#
+def limpa_telefone(telefone):
+    if len(telefone)==14:
+        ddd = telefone[1:3]
+        bloco5 = telefone[4:9]
+        bloco4 = telefone[10:]
+        return ddd+bloco5+bloco4
+    
+    if len(telefone)==13:
+        ddd = telefone[1:3]
+        bloco1 = telefone[4:8]
+        bloco2 = telefone[9:]
+        return ddd+bloco1+bloco2
+
+def formata_cep(cep):
+    return cep[0:2]+'.'+cep[2:5]+'-'+cep[5:]
+
+def formata_data(data): # 12/34/5678 <-- 5678-34-12
+    return data[8:]+'/'+data[5:7]+'/'+data[0:4]
+
+def formata_telefone(telefone): # 21964011311 - (21) 96401-1311
+    """Transforma um telefone vindo do bd no formato (21)1111-1111 ou (21)11111-1111"""
+    if len(telefone) == 11:
+        telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:7], telefone[7:])
+    else:
+        telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:6], telefone[6:])
+    return telefone
+
+def formata_cpf(cpf): # 00000000000 -> 000.000.000-00
+    return cpf[0:3]+'.'+cpf[3:6]+'.'+cpf[6:9]+'-'+cpf[9:]
+
+def limpa_cpf(cpf):
+    '''Limpa o CPF, tirando ponto e traço'''
+    first = cpf[:3]
+    second = cpf[4:7]
+    third = cpf[8:11]
+    final =cpf[12:]
+    return first+second+third+final
+
+def valida_cpf(cpf):
+    '''Faz a validação do cpf inserido. Retorna True se for válido e False se for inválido'''
+    cpf_limpo = limpa_cpf(cpf)
+
+    digitos=[]
+    for i in range (0, 11):
+        digitos.append(int(cpf_limpo[i]))
+    
+    primeiro_validador = 0
+    for i in range (0, 9):
+        buffer = (10-i)*digitos[i]
+        primeiro_validador += buffer
+    primeiro_resto = primeiro_validador%11    
+
+    if primeiro_resto<2:
+        primeiro_digito = 0
+    else:
+        primeiro_digito = 11-primeiro_resto
+    
+    if primeiro_digito != digitos[9]:
+        return False
+
+    segundo_validador=0
+
+    for i in range (0, 10):
+        buffer = (11-i)*digitos[i]
+        segundo_validador += buffer
+    segundo_resto = segundo_validador%11
+
+    if segundo_resto<2:
+        segundo_digito=0
+    else:
+        segundo_digito = 11-segundo_resto
+
+    if segundo_digito != digitos[10]:
+        return False
+
+    return True
+
+def limpa_cep(cep):
+    return cep[:5]+cep[6:]
