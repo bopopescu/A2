@@ -175,10 +175,10 @@ def verifica_idade(data_de_nascimento):
     else:
         return False
         
-def cpf_id(cpf, tabela):
+def cpf_id(cpf):
     """Retorna o id correspondente ao cpf"""
-    cpf = "cpf="+str(cpf)
-    id = select("id", tabela, cpf)
+    where = "cpf = " + str(cpf)
+    id = select("id",'usuarios', where)
     return id[0][0]
 
 def cpf_tipo(cpf, tabela):
@@ -309,8 +309,8 @@ def pre_cadastra(nome, cpf, telefone, email):
         cursor = con.cursor()
         user_mail = separa_email(email)[0]
         domain_mail = separa_email(email)[1]
-        data_de_nascimento = '-'
-        senha = '-'
+        data_de_nascimento = None
+        senha = None
         tipo = 0
         sql = "INSERT INTO usuarios (id, cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo) VALUES(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         data = (cpf, nome, email, user_mail, domain_mail, telefone, data_de_nascimento, senha, tipo)
@@ -322,14 +322,14 @@ def pre_cadastra(nome, cpf, telefone, email):
     finally:
         cursor.close()
         con.close()
-
+pre_cadastra('enzo','11223344556','21991152355', 'enzo@gmail.com')
 def completa_cadastro_cliente(nome, data_de_nascimento, cpf, telefone, email, senha, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
     con = None
     cursor = None
     try:
         con = mysql.connector.connect(**config)
         cursor = con.cursor()
-        id_cliente = cpf_id(cpf, 'usuarios')
+        id_cliente = cpf_id(cpf)
         ups_usuario = {'nome':nome, 'data_de_nascimento':data_de_nascimento, 'telefone':telefone, 'email':email, 'user_mail':user_mail, 'domain_mail':domain_mail, 'senha':senha, 'cep':cep, 'endereco':endereco, 'numero':numero, 'complemento':complemento, 'cidade':cidade, 'estado':estado, 'nome_responsavel':nome_responsavel, 'cpf_responsavel':cpf_responsavel}
         update(ups_usuario,'clientes','id_cliente='+str(id_cliente))
     except Exception as e:

@@ -226,7 +226,7 @@ def login():
         senha_inserida = request.form["senha"]
 
         if controler.verifica_cpf(cpf_inserido, "usuarios"): # ta na bd
-            user = Usuario(controler.cpf_id(cpf_inserido, "usuarios"))
+            user = Usuario(controler.cpf_id(cpf_inserido))
             if check_password_hash(user.senha,senha_inserida):
                 session['user'] = True
                 session['id'] = user.id
@@ -340,7 +340,7 @@ def RecibosProfissional():
 
             msg = Message("Recibo", recipients=[cliente.email])
             #msg.body= "Segue em anexo o recibo referente à sua consulta."
-            rendered = controler.gerar_pdf(id_atendimento)
+            rendered = gerar_pdf(id_atendimento)
             msg.html = rendered
             mail.send(msg)
             '''
@@ -493,7 +493,7 @@ def CadastrarAtendimentos():
             email = request.form["email"]
             telefone = request.form["telefone"]
             if controler.verifica_cpf(controler.limpa_cpf(cpf),'usuarios'): #Se o usuario está cadastrado, puxa os dados dele
-                id_usuarioAtendimento = controler.cpf_id(controler.limpa_cpf(cpf), 'usuarios')
+                id_usuarioAtendimento = controler.cpf_id(controler.limpa_cpf(cpf))
                 userAtendimento = Usuario(id_usuarioAtendimento)
                 if nome != userAtendimento.nome: #Essa sequência de 3 if's é pra completar o preencher automaticamente
                     nome = userAtendimento.nome
@@ -513,7 +513,8 @@ def CadastrarAtendimentos():
                     telefone = request.form["telefone"]
                     cpf = controler.limpa_cpf(request.form['cpfCliente'])
                     controler.pre_cadastra(nome, cpf, controler.limpa_telefone(telefone), email)
-                    id_usuarioAtendimento = controler.cpf_id(cpf, 'usuarios')
+                    
+                    id_usuarioAtendimento = controler.cpf_id(cpf)
                     controler.cadastra_cliente(id_usuarioAtendimento,'-','-''-','-','-','-','-','-','-') 
                      #Se o cliente n tá cadastrado, é criado um semi-cadastro e depois o id_cliente dele é puxado
 
