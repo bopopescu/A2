@@ -139,6 +139,9 @@ def limpa_telefone(telefone):
         bloco2 = telefone[9:]
         return ddd+bloco1+bloco2
 
+def formata_cep(cep):
+    return cep[0:2]+'.'+cep[2:5]+'-'+cep[5:]
+
 def formata_data(data): # 12/34/5678 <-- 5678-34-12
     return data[8:]+'/'+data[5:7]+'/'+data[0:4]
 

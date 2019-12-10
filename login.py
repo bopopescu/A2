@@ -619,14 +619,22 @@ def Relatorios():
             numero = profissional.numero #
             cidade = profissional.cidade #
             estado = profissional.estado #
-            CEP = profissional.cep #
+            CEP = controler.formata_cep(profissional.cep) #
 
             data_inicial = controler.inverte_data(request.form["inicial"])
             data_final = controler.inverte_data(request.form["final"])
             atendimentos = controler.atendimentos_periodo(id_profissional, data_inicial, data_final)
             tabela = []
             for atendimento in atendimentos:
-                tabela.append([atendimento[6], controler.formata_cpf(atendimento[7]),atendimento[2]])
+                ano = str(atendimento[3].year)
+                mes = str(atendimento[3].month)
+                if len(mes)==1:
+                    mes='0'+mes
+                dia = str(atendimento[3].day)
+                if len(dia)==1:
+                    dia='0'+dia
+                data_consulta = dia+'/'+mes+'/'+ano
+                tabela.append([atendimento[6], controler.formata_cpf(atendimento[7]),atendimento[2], data_consulta])
 
             rendered = render_template('Relatorio.html', nomeProfissional = nomeProfissional, regProf = regProf, email=email, telefone=controler.formata_telefone(telefone), enderecoComercial=enderecoComercial, numero=numero, cidade=cidade, estado=estado, CEP=CEP, data_inicial = controler.formata_data(data_inicial), data_final = controler.formata_data(data_final), tabela = tabela, lenTabela = len(tabela))
 
