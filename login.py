@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response, session, g
+from flask_wtf import FlaskForm, RecaptchaField
 import pdfkit
 import controler
 from flask_mail import Mail, Message
@@ -10,6 +11,8 @@ import uuid
 app = Flask(__name__)
 
 app.secret_key = "PipocaSalgada"
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6Ld6B8cUAAAAABYo48XPJXbP5zCoKF3peLIpEnLF'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6Ld6B8cUAAAAAMdrG5idXQW25YAK_Sq7jsYoeNi1'
 
 class Usuario():
 
@@ -101,6 +104,8 @@ class Cliente(Usuario):                                              #Criando Cl
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     error = None
+    recaptcha = RecaptchaField()
+
     if request.method == "POST": #cliente
         if request.form["radio"] == '0':
             nome = request.form["nome"]
@@ -118,6 +123,7 @@ def cadastro():
                 complemento = request.form["complemento"]
             cidade = request.form["cidade"]
             estado = request.form["estado"]
+
 
             if nome=='' or data_de_nascimento=='' or cpf=='' or telefone=='' or email=='' or senha=='' or cep=='' or endereco=='' or numero=='' or cidade=='' or estado=='':
                 error = 'Preencha todos os campos!'
@@ -209,7 +215,7 @@ def cadastro():
                     telefone_comercial=telefone
                     controler.cadastra_profissional(id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado)
                     return redirect(url_for('login'))
-    return render_template('create.html', error=error)
+    return render_template('create.html', error=error, recaptcha=recaptcha)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -317,7 +323,7 @@ def RecibosProfissional():
         if "Baixar recibo" in dicInvertido :
             index = int(dicInvertido["Baixar recibo"])
             id_atendimento = str(recibosNew[index][0])
-            rendered = controler.gerar_pdf(id_atendimento)
+            rendered = gerar_pdf(id_atendimento)
 
             pdf = pdfkit.from_string(rendered, False)
 
@@ -389,7 +395,8 @@ def RecibosCliente():
         if "Baixar recibo" in dicInvertido :
             index = int(dicInvertido["Baixar recibo"])
             id_atendimento = str(recibosNew[index][0])
-            rendered = controler.gerar_pdf(id_atendimento)
+            rendered = gerar_pdf(id_atendimento)
+
             pdf = pdfkit.from_string(rendered, False)
 
             response =  make_response(pdf)
@@ -662,12 +669,62 @@ def Relatorios():
             pdf = pdfkit.from_string(rendered, False)
             response =  make_response(pdf)
             response.headers['Content-Type'] =  'applocation/pdf'
-            response.headers['Content-Disposition'] =   'inline; filename = recibo' + nomeProfissional + '.pdf'
+            response.headers['Content-Disposition'] =   'inline; filename = Relatorio - ' + nomeProfissional + '- de '+ data_inicial + ' até ' + data_final +'.pdf'
 
             return response
 
         return render_template("Relatorios.html")
     return redirect(url_for("login"))
+
+def valida_data(data):
+    '''Checa se a data inserida é maior que a data atual, logo é inválida'''
+    hoje = date.today()
+    hoje = int(str(hoje.year) + ("0" + str(hoje.month))[-2:] + ("0" + str(hoje.day))[-2:])
+    data = int(data[6:] + data[3:5] + data[0:2])
+    return data > hoje
+
+def gerar_pdf(id_atendimento):
+    id_profissional = str(controler.select("id_profissional", "atendimentos", "id_atendimento="+id_atendimento)[0][0])
+    id_cliente = str(controler.select("id_cliente", "atendimentos", "id_atendimento = " + id_atendimento)[0][0])
+
+    profissional = Profissional(id_profissional) #
+    nomeProfissional = profissional.nome #
+    cpfProfissional = controler.formata_cpf(profissional.cpf) #
+    regProf = profissional.registro_profissional #
+    email = profissional.email #
+    telefone = profissional.telefone_comercial #
+    enderecoComercial = profissional.endereco #
+    numero = profissional.numero #
+    cidade = profissional.cidade #
+    estado = profissional.estado #
+    CEP = controler.formata_cep(profissional.cep) #
+
+    cliente = Cliente(id_cliente)
+    nomeCliente = cliente.nome
+    cpfCliente = controler.formata_cpf(cliente.cpf)
+
+
+    cpfRes = controler.select("cpf_responsavel", "clientes" , "id_cliente = " + id_cliente)[0][0]
+    cpfRes = '{}.{}.{}-{}'.format(cpfRes[0:3],cpfRes[3:6],cpfRes[6:9],cpfRes[9:])
+    nomeRes = controler.select("nome_responsavel", "clientes" , "id_cliente = " + id_cliente)[0][0]
+    precoConsulta = controler.select("valor", "atendimentos", "id_atendimento = " + id_atendimento)[0][0]
+    dataDoAtendimento = (controler.select("data_consulta", "atendimentos" , "id_atendimento = " + id_atendimento)[0][0]).strftime("%d/%m/%Y")
+    ano = str(datetime.now().year)
+    mes = str(datetime.now().month)
+    dia = str(datetime.now().day)
+    if len(mes)==1:
+        mes='0'+mes
+        dia = str(datetime.day)
+    if len(dia)==1:
+        dia='0'+dia
+    dataGerado = dia+'/'+mes+'/'+ano
+
+    if nomeRes == '-' or nomeRes == None:
+        rendered = render_template('pdf_template18+.html', nomeProfissional = nomeProfissional, cpfProfissional=cpfProfissional, regProf = regProf, nomeCliente=nomeCliente, cpfCliente=cpfCliente, precoConsulta=precoConsulta, dataDoAtendimento=dataDoAtendimento, email=email, telefone=controler.formata_telefone(telefone), enderecoComercial=enderecoComercial, numero=numero, cidade=cidade, estado=estado, CEP=CEP, dataGerado=dataGerado)
+    else:
+        rendered = render_template('pdf_template18-.html', nomeProfissional = nomeProfissional, regProf = regProf, profissao = profissao, nome = nome, cpfRes = cpfRes, nomeRes = nomeRes, precoConsulta = precoConsulta, email=email, enderecoComercial = enderecoComercial, telefone = telefone, cep = cep , dataDoAtendimento = dataDoAtendimento)
+
+    return rendered
 
 # formaPagamento = formaPagamento_anual 
 if __name__ == '__main__':
