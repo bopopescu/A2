@@ -91,10 +91,15 @@ body {
   -moz-transition: all 0.3s;
 }
 
-.input:hover {
+ .input2 {
   outline: none;
   box-shadow: 2px 2px 20px #ddd;
   color: rgba(0, 0, 0, 0);
+}
+
+.input3{
+  box-shadow: 2px 2px 20px #ddd;
+  outline: none;
 }
 
 .txt {
@@ -108,24 +113,29 @@ body {
   opacity: 0;
 }
 
-.txt:hover{
+.txt2{
   color: #57b846;
   cursor: pointer;
   opacity: 1;
 }
 
-.input:hover + .txt {
-  color: #57b846;
+.txt3{
+  color: #666666;
   cursor: pointer;
   opacity: 1;
 }
 
-.txt:hover .input {
-  outline: none;
-  box-shadow: 2px 2px 20px #ddd;
-  color: rgba(0, 0, 0, 0);
+.txt4{
+  display: none;
 }
 
+.inputChange{
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  line-height: 150%;
+  border-bottom: 1px solid black;
+}
 
 .cpfError {
   color: rgb(221, 57, 57);
