@@ -513,7 +513,6 @@ def CadastrarAtendimentos():
                     telefone = request.form["telefone"]
                     cpf = controler.limpa_cpf(request.form['cpfCliente'])
                     controler.pre_cadastra(nome, cpf, controler.limpa_telefone(telefone), email)
-                    
                     id_usuarioAtendimento = controler.cpf_id(cpf)
                     controler.cadastra_cliente(id_usuarioAtendimento,'-','-''-','-','-','-','-','-','-') 
                      #Se o cliente n tá cadastrado, é criado um semi-cadastro e depois o id_cliente dele é puxado
