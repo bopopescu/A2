@@ -61,7 +61,8 @@
                                         Profissional:&nbsp;</strong>
                                     {{registro}}
                                 </div>
-                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="registro_profissional">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px"
+                                    name="registro_profissional">
                                     Alterar
                                 </div>
                             </div>
@@ -80,7 +81,8 @@
                                         nascimento:&nbsp;</strong>
                                     {{nascimento}}
                                 </div>
-                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="data_de_nascimento">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px"
+                                    name="data_de_nascimento">
                                     Alterar
                                 </div>
                             </div>
@@ -148,8 +150,8 @@
                             </div>
 
                             <div class="inputBox" name="senha">
-                                <div type="div" class="input" name="senha"></div>
-                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px; opacity: 1;"
+                                <div type="div" class="inputSenha" name="senha"></div>
+                                <div class="txtSenha" onclick="window.location.href = '{{ url_for( 'redf2')}}'" style="font-size: 17px; opacity: 1;"
                                     name="senha">
                                     Alterar senha
                                 </div>
@@ -173,7 +175,8 @@
 
     <script> // Esse script é para fazer aparecer o "Alterar"
         window.onmouseover = function (e) {
-            if (e.target.className == "input" && e.target.childNodes[1].textContent != "") {
+
+            if (e.target.className == "input" && (e.target.childNodes[1].textContent != "")) {
 
                 name = e.target.getAttribute("name");
                 elementos = document.getElementsByName(name)
@@ -210,21 +213,21 @@
             input.className = "input input3";
             var value = String(input.childNodes[1].textContent).trimLeft().trimRight();
 
-            input.removeChild(input.lastChild)
+                input.removeChild(input.lastChild)
 
             a = document.createElement("div")
 
-            if(name == "telefone"){
-                a.innerHTML = '<input value="' + value + '" class="inputChange" name='+ name +' type="tel" oninput="this.value = TEL(this.value, event)" maxlength="14"></input>'
-            }else if(name == "data_de_nascimento"){
-                a.innerHTML = '<input value="' + value + '" oninput="this.value = DDMMYYYY(this.value, event)" maxlength="10" class="inputChange" name='+ name +' type="tel" oninput="this.value = TEL(this.value, event)" maxlength="14"></input>'
+            if (name == "telefone") {
+                a.innerHTML = '<input value="' + value + '" class="inputChange" name=' + name + ' type="tel" oninput="this.value = TEL(this.value, event)" maxlength="14"></input>'
+            } else if (name == "data_de_nascimento") {
+                a.innerHTML = '<input value="' + value + '" oninput="this.value = DDMMYYYY(this.value, event)" maxlength="10" class="inputChange" name=' + name + '></input>'
             }
-            else if(name == "cep"){
-                a.innerHTML = '<input value="' + value + '" maxlength="9" oninput="this.value = CEP(this.value, event)" class="inputChange" name='+ name +' type="tel" oninput="this.value = TEL(this.value, event)" maxlength="14"></input>'
+            else if (name == "cep") {
+                a.innerHTML = '<input value="' + value + '" maxlength="9" oninput="this.value = CEP(this.value, event)" class="inputChange" name=' + name + '></input>'
 
             }
-            else{
-                a.innerHTML = '<input value="' + value + '" class="inputChange" name='+ name +'></input>'
+            else {
+                a.innerHTML = '<input value="' + value + '" class="inputChange" name=' + name + '></input>'
             }
 
             console.log(input.childNodes)
@@ -234,7 +237,10 @@
             input.appendChild(a);
 
         }
+    </script>
 
+
+    <script> //formatações
         function TEL(value, event) {
             let newValue = value.replace(/[^0-9]/g, '');
 

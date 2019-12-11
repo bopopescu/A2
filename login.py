@@ -679,6 +679,23 @@ def redf(token):
             error = "O token expirou."
     return render_template('redefinir_senha.html', error = error)   
 
+@app.route('/redefinir2', methods=['GET', 'POST'])
+def redf2():
+    error = None
+    if request.method == 'POST':
+        senhanova = request.form['senhanova']
+        confirma_senhanova = request.form['confirma_senhanova']
+        if senhanova == confirma_senhanova:
+            hashed_nova = generate_password_hash(senhanova)
+            cpf = Profissional(session["id"]).cpf
+            if controler.verifica_cpf(cpf, 'usuarios'):
+                ups = {'senha':hashed_nova}
+                controler.update(ups, "usuarios", "cpf="+cpf)
+            return redirect(url_for('login'))
+        else:
+            error = "As senhas não conferem."
+    return render_template('redefinir_senha.html', error = error)   
+
 @app.route('/enviaEmail/')
 def enviaEmail(email):
     msg = Message("Recibo", recipients=[email])
