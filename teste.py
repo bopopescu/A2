@@ -15,4 +15,15 @@ def valida_data(data):
     data = int(data[6:] + data[3:5] + data[0:2])
     return data > hoje
 
-valida_data("01/12/1999")
+# valida_data("01/12/1999")
+
+def converte_data(data):
+    '''converte uma data do tipo DD/MM/AAAA em date
+    str -> date'''
+    dia = int(data[:2])
+    mes = int(data[3:5])
+    ano = int(data[6:])
+    dataFormatada = date(ano, mes, dia)
+    return dataFormatada
+
+print(converte_data("27/02/2019"))

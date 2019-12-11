@@ -50,7 +50,10 @@
                 <center>{{nomeProfissional}}</center>
             </h1>
             <h3>
-                <center>Registro Profissional {{regProf}}</center>
+                {% if regProf != "-" %}
+                    <center>Registro Profissional {{regProf}}</center>
+                {% else %}
+                {% endif %}
                 <br>
                 <center>CPF {{cpfProfissional}}</center>
             </h3>
@@ -72,7 +75,7 @@
 
         <div id="rodape">
             <p id="telefone-email">{{email}} - {{telefone}}</p>
-            <p id="endereco">{{enderecoComercial}}, {{numero}}, {{cidade}}, {{estado}}, {{CEP}}</p>
+            <p id="endereco">{{enderecoCompleto}}</p>
             <small id="copyright"> Gerado com &copy;A² em {{dataGerado}}.</small>
         </div>
     </div>
