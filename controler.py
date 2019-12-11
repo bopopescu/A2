@@ -5,10 +5,10 @@ import pdfkit
 from datetime import date, datetime, timedelta
 
 config = {
-  'user': 'root',
-  'password': 'password',
-  'host': '127.0.0.1',
-  'database': 'waat',
+  'user': 'sql10315021',
+  'password': 'amqay846Cl',
+  'host': 'sql10.freesqldatabase.com',
+  'database': 'sql10315021',
   'port': '3306'}
 
 con = mysql.connector.connect(**config)
@@ -387,18 +387,21 @@ def valida_token(token):
     validacao = (data_agora - data_registro)
     return validacao<timedelta(days=1)
 
+def valida_data(data):
+    '''Checa se a data inserida é maior que a data atual, logo é inválida'''
+    hoje = date.today()
+    hoje = int(str(hoje.year) + ("0" + str(hoje.month))[-2:] + ("0" + str(hoje.day))[-2:])
+    data = int(data[6:] + data[3:5] + data[0:2])
+    return data > hoje
+
 def converte_data(data):
     '''converte uma data do tipo DD/MM/AAAA em date
     str -> date'''
-    dia = data[:2]
-    if dia[0]=='0':
-        dia = int(dia[1])
-    else:
-        dia = int(dia)
-        mes = int(data[3:5])
-        ano = int(data[6:])
-        data = date(ano, mes, dia)
-    return data
+    dia = int(data[:2])
+    mes = int(data[3:5])
+    ano = int(data[6:])
+    dataFormatada = date(ano, mes, dia)
+    return dataFormatada
 
 def inverte_data(data): # 12/34/5678 -> 5678-34-12
     return data[6:]+'-'+data[3:5]+'-'+data[0:2]
@@ -527,7 +530,7 @@ def limpa_telefone(telefone):
         return ddd+bloco1+bloco2
 
 def formata_cep(cep):
-    return cep[0:2]+'.'+cep[2:5]+'-'+cep[5:]
+    return cep[0:2]+cep[2:5]+'-'+cep[5:]
 
 def formata_data(data): # 12/34/5678 <-- 5678-34-12
     return data[8:]+'/'+data[5:7]+'/'+data[0:4]

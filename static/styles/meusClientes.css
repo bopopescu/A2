@@ -66,6 +66,12 @@ body {
   margin-bottom: 20px;
 }
 
+.greetings{
+  color: #fff;
+  font-size: 35px;
+  transform: translate(0,-150px)
+}
+
 .input {
   background: #e7e7e7;
   border-radius: 20px;
@@ -127,15 +133,6 @@ th {
 }
 
 .botao:hover {
-  background: #2ecc71;
-  border-radius: 100px;
-  border-width: 0;
-  height: 50px;
-  width: 300px;
-  font-size: 20px;
-  padding: 0px 15px 0px 15px;
-  color: #fff;
-
   box-shadow: 2px 2px 20px #c9c9c9b9;
 }
 
@@ -226,26 +223,20 @@ th {
   cursor: default;
 }
 
-.greetings{
-  color: #fff;
-  font-size: 35px;
-  transform: translate(0,-150px)
-}
-
-@keyframes dropdown{
-  from{
+@keyframes dropdown {
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 1;
   }
 }
 
-@keyframes undropdown{
-  from{
+@keyframes undropdown {
+  from {
     opacity: 1;
   }
-  to{
+  to {
     opacity: 0;
   }
 }

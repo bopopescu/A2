@@ -18,19 +18,25 @@
       <i class="fa icon" style="font-size: 40px; position: absolute;" onclick="window.location.href='{{ url_for('loggedProfissional')}}'">&#xf0a8;</i>
     </div>
       <div class = "wrapper">
+
+        <div class = "ChartBox">
+          <div class = "tituloBloco">Ganho Anual</div>
+          <div class = "iconeBloco"><i class="iconify" data-icon="ic-round-attach-money"  data-inline="false" style="color: #393e46;" data-width="48" data-height="48"></i></div>
+          <div class = "valorBloco"> R$ {{ganho_anual}}</div>
+        </div>
+      
+      <div class = "ChartBox">
+        <div class = "tituloBloco">Ganho Mensal</div>
+        <div class = "iconeBloco"><i class="iconify" data-icon="ic-round-attach-money"  data-inline="false" style="color: #393e46;" data-width="48" data-height="48"></i></div>
+        <div class = "valorBloco">R$ {{ganho_mes_atual}}</div>
+      </div>
+
       <div class = "ChartBox">
         <div class = "tituloBloco">Atendimentos no mês</div>
         <div class = "iconeBloco"><i class="iconify" data-icon="el:user" data-inline="false" style="color: #393e46;" data-width="48" data-height="48"></i></div>
         <div class = "valorBloco">{{atendimento_mes_atual}}</div>
       </div> 
       
-      <div class = "ChartBox">
-        <div class = "tituloBloco">Lucro Mensal</div>
-        <div class = "iconeBloco"><i class="iconify" data-icon="ic-round-attach-money"  data-inline="false" style="color: #393e46;" data-width="48" data-height="48"></i></div>
-        <div class = "valorBloco">{{ganho_mes_atual}}</div>
-      </div>
-
-      <div class = "ChartBox">Três</div>
       </div>
     
     <div class = "wrapperPrincipal">
@@ -38,10 +44,6 @@
       <canvas id="myChart"></canvas>
           <script>
                 var ctx = document.getElementById("myChart").getContext("2d");
-                var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-                gradientStroke.addColorStop(0, "#80b6f4");
-                gradientStroke.addColorStop(1, "#f49080");
-
                 var chart = new Chart(ctx, {
                   // The type of chart we want to create
                   type: "line",
@@ -52,10 +54,9 @@
                     datasets: [
                       {
                         label: "Ganhos anual",
-                        backgroundColor: "#29a19c",
                         pointBackgroundColor: "#fff",
                         pointHoverBackgroundColor: "#fff",
-                        pointHoverBorderColor: "#f49080",
+                        pointHoverBorderColor: "#239c55",
                         pointBorderWidth: 3,
                         pointHoverRadius: 5,
                         pointHoverBorderWidth: 3,
@@ -112,10 +113,6 @@
         });
         </script>
       </div>
-
-      <div class = "ChartBox">Two</div>
-
-      <div class = "ChartBox">Three</div>
 
     </div>
   </body>

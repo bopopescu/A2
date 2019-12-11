@@ -8,27 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/RecibosCliente.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/meusClientes.css') }}">
     <!-- <link rel="stylesheet" type="text/css" href="../static/styles/login.css"> -->
 
     <title>Clientes</title>
 </head>
 
 <body>
-    <i class="fa icon" onclick="window.location.href='{{ url_for('loggedProfissional')}}'">&#xf0a8;</i>
+    <i class="fa icon" onclick="window.location.href='{{ url_for( 'loggedProfissional')}}'">&#xf0a8;</i>
+
     <div class="container-login100" id="container">
-        <div class = "greetings">Seus Clientes</div>
-        <form method="POST" id="form" style="width: 90% ;max-width: 1050px">
-            <div>
+        <form method="POST" id="form" style="width: 90% ;max-width: 1050px; transform: translate(5%,0);">
+
+            <div style="width: 90%; max-width: 1050px;">
                 <div style="display: flex;flex-direction: row; justify-content: space-between;">
-                    <div></div>
+                    <div class="inputBox" style="padding-bottom: 0px;">
+                    </div>
                     <div class="dropdown" style="margin-bottom: 15px">
                         <button class="botao botao2">Ordenar por</button>
                         <div class="dropdown-content">
-                            <input type="submit" class="option" name="Data" value="data"
-                                onclick="document.getElementById('form').submit()">
-                            <input type="submit" class="option" name="Nome" value="nome"
-                                onclick="document.getElementById('form').submit()">
+                            <input type="submit" class="option" name="data" value="Data">
+                            <input type="submit" class="option" name="nome" value="Nome">
                         </div>
                     </div>
                 </div>
@@ -52,10 +52,10 @@
                                 <td>{{recibo[1]}}</td>
                                 <td>{{recibo[2]}}</td>
                                 <td>
-                                    <input type="submit" class="botao" style="font-size: 17px"
-                                    name={{recibos.index(recibo)}} value="+">
+                                    <input type="submit" class="botao"
+                                        style="background-color: #2ecc7091; width: 40px; height: 40px;"
+                                        name={{recibos.index(recibo)}} value="+">
                                     </input>
-                                                           
                                 </td>
 
                             </tr>
