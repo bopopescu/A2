@@ -94,6 +94,9 @@ body {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   -moz-transition: all 0.2s;
+  -o-appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
 }
 
 .input:focus {

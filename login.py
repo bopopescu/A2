@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response, session, g
-from flask_wtf import FlaskForm, RecaptchaField
+# from flask_wtf import FlaskForm, RecaptchaField
 import pdfkit
 import controler
 from flask_mail import Mail, Message
@@ -104,7 +104,7 @@ class Cliente(Usuario):                                              #Criando Cl
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     error = None
-    recaptcha = RecaptchaField()
+    # recaptcha = RecaptchaField()
 
     if request.method == "POST": #cliente
         if request.form["radio"] == '0':
@@ -152,12 +152,12 @@ def cadastro():
                         tipo=1
                         controler.cadastra_usuario(cpf, nome, email, telefone, controler.converte_data(data_de_nascimento), hashed_password, tipo)
                         id_cliente = controler.select("id", "usuarios", "cpf="+str(cpf))[0][0]
-                        controler.cadastra_cliente(id_cliente,limpa_cep(cep),endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
+                        controler.cadastra_cliente(id_cliente,controler.limpa_cep(cep),endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
                         return redirect(url_for('login'))
                     
                     else: #menor de idade
                         nome_responsavel = request.form["nomeRes"]
-                        cpf_responsavel = request.form["cpfRes"]
+                        cpf_responsavel = controler.limpa_cpf(request.form["cpfRes"])
                         if nome_responsavel=='' or cpf_responsavel =='':
                             error = 'Preencha todos os campos'
                         elif cpf_responsavel == "CPF Inválido" or len(cpf_responsavel) != 14:
@@ -166,7 +166,7 @@ def cadastro():
                             tipo=1
                             controler.cadastra_usuario(cpf, nome, email, telefone, controler.converte_data(data_de_nascimento), hashed_password, tipo)
                             id_cliente = controler.select("id", "usuarios", "cpf="+str(cpf))[0][0]
-                            controler.cadastra_cliente(id_cliente,limpa_cep(cep),endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
+                            controler.cadastra_cliente(id_cliente,controler.limpa_cep(cep),endereco,numero,complemento,cidade,estado, nome_responsavel, cpf_responsavel)
                             return redirect(url_for('login'))
 
         if request.form["radio"] == '1': #profissional
@@ -215,7 +215,8 @@ def cadastro():
                     telefone_comercial=telefone
                     controler.cadastra_profissional(id_profissional, profissao, registro_profissional, telefone_comercial, cep, endereco, numero, complemento, cidade, estado)
                     return redirect(url_for('login'))
-    return render_template('create.html', error=error, recaptcha=recaptcha)
+    # return render_template('create.html', error=error, recaptcha=recaptcha)
+    return render_template('create.html', error=error)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -308,10 +309,13 @@ def RecibosProfissional():
 
     if request.method == "POST": # Handles os ordenadores
         if "data" in request.form:
+            app.logger.info("1")
             recibosNew.sort(key = sortData)
         elif "nome" in request.form:
+            app.logger.info("2")
             recibosNew.sort(key = sortNome)
         elif "valor" in request.form:
+            app.logger.info("3")
             recibosNew.sort(key = sortValor)
         elif "cadastrar" in request.form:
             return redirect(url_for('CadastrarAtendimentos'))
@@ -410,13 +414,11 @@ def RecibosCliente():
 @app.route('/meusClientes', methods=['GET', 'POST'])
 def meusClientes():
     def sortData(val):
-        data = val[4][6:] + val[4][3:5] + val[4][0:2]
+        app.logger.info(val)
+        data = val[2][6:] + val[2][3:5] + val[2][0:2]
         return int(data)
     def sortNome(val): 
-        return val[8]
-    def sortValor(val): 
-        valor = val[3].replace("R$","").replace(",","")
-        return int(valor)
+        return val[1]
     id_profissional = session['id']
     atendimentos = controler.select("*", "atendimentos", "id_profissional="+id_profissional)
     clientes = [] #criar lista dos clientes atendidos, só o id
@@ -476,8 +478,36 @@ def DetalhesCliente(id_cliente):
                 recibosNew.sort(key = sortData)
             elif "valor" in request.form:
                 recibosNew.sort(key = sortValor)
+        
+        if request.method == "POST":
+            dic = request.form.to_dict()
+            app.logger.warning(dic)
+            dicInvertido = dict(zip(dic.values(),dic.keys()))
+            if "Baixar recibo" in dicInvertido :
+                index = int(dicInvertido["Baixar recibo"])
+                id_atendimento = str(recibosNew[index][0])
+                rendered = gerar_pdf(id_atendimento)
 
-        return render_template("DetalhesCliente.html", nome_cliente = cliente.nome, telefone_cliente = cliente.telefone, email_cliente = cliente.email, recibos=recibosNew)
+                pdf = pdfkit.from_string(rendered, False)
+
+                response =  make_response(pdf)
+                response.headers['Content-Type'] =  'applocation/pdf'
+                response.headers['Content-Disposition'] =   'inline; filename = recibo' + id_atendimento + '.pdf'
+
+                return response
+
+            if "enviarEmail" in dicInvertido:
+                index = int(dicInvertido["enviarEmail"])
+                id_atendimento = str(recibosNew[index][0])
+                cliente = Cliente(controler.cliente_atendido(id_atendimento))
+
+                msg = Message("Recibo", recipients=[cliente.email])
+                #msg.body= "Segue em anexo o recibo referente à sua consulta."
+                rendered = gerar_pdf(id_atendimento)
+                msg.html = rendered
+                mail.send(msg)
+
+        return render_template("DetalhesCliente.html", nome_cliente = cliente.nome, telefone_cliente = controler.formata_telefone(cliente.telefone), email_cliente = cliente.email, recibos=recibosNew)
     return redirect(url_for('login'))
 
 @app.route('/cadastraAtendimento', methods=['GET', 'POST'])
@@ -526,7 +556,8 @@ def CadastrarAtendimentos():
             numero_parcelas = request.form['numero_parcelas']
 
             if request.form["cpfCliente"] != "" and request.form["nome"] != "" and request.form["email"] != "" and request.form["telefone"] != "" and request.form["dataConsulta"] != "" and request.form["valor"] != "" and forma_pagamento !="0" and numero_parcelas!="":
-                controler.cadastra_atendimento(id_profissional, id_usuarioAtendimento, valor, controler.converte_data(data_consulta), data_gerado, int(forma_pagamento), int(numero_parcelas))
+                data_consulta = controler.converte_data(data_consulta)
+                controler.cadastra_atendimento(id_profissional, id_usuarioAtendimento, valor, data_consulta, data_gerado, int(forma_pagamento), int(numero_parcelas))
                 return redirect(url_for('RecibosProfissional')) 
             else:
                 if "botao" in request.form:
@@ -540,7 +571,10 @@ def Informacoes_cadastroPro():
         telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:7], telefone[7:])
     else:
         telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:6], telefone[6:])
-    return render_template('Informacoes_cadastroPro.html', nome=Profissional(session['id']).nome, cpf=Profissional(session['id']).cpf, profissao=Profissional(session['id']).profissao, registro=Profissional(session['id']).registro_profissional, telefone=telefone, nascimento=Profissional(session['id']).data_de_nascimento, email=Profissional(session['id']).email, cep=Profissional(session['id']).cep, endereco=Profissional(session['id']).endereco, numero=Profissional(session['id']).numero, complemento=Profissional(session['id']).complemento, cidade=Profissional(session['id']).cidade, estado=Profissional(session['id']).estado)
+    cpf = Profissional(session['id']).cpf
+    cpf = '{}.{}.{}-{}'.format(cpf[0:3],cpf[3:6],cpf[6:9],cpf[9:])
+    nascimento = Profissional(session['id']).data_de_nascimento
+    return render_template('Informacoes_cadastroPro.html', nome=Profissional(session['id']).nome, cpf=cpf, profissao=Profissional(session['id']).profissao, registro=Profissional(session['id']).registro_profissional, telefone=telefone, nascimento=nascimento.strftime('%d/%m/%Y'), email=Profissional(session['id']).email, cep=Profissional(session['id']).cep, endereco=Profissional(session['id']).endereco, numero=Profissional(session['id']).numero, complemento=Profissional(session['id']).complemento, cidade=Profissional(session['id']).cidade, estado=Profissional(session['id']).estado)
 
 @app.route('/infoCliente', methods=['GET', 'POST'])
 def Informacoes_cadastroCliente():
@@ -552,7 +586,7 @@ def Informacoes_cadastroCliente():
     cpf = Cliente(session['id']).cpf
     cpf = '{}.{}.{}-{}'.format(cpf[0:3],cpf[3:6],cpf[6:9],cpf[9:])
 
-    return render_template('Informacoes_cadastroCliente.html', nome=Cliente(session['id']).nome, cpf=cpf, telefone=telefone, nascimento=Cliente(session['id']).data_de_nascimento, email=Cliente(session['id']).email, cep=Cliente(session['id']).cep, endereco=Cliente(session['id']).endereco, numero=Cliente(session['id']).numero, complemento=Cliente(session['id']).complemento, cidade=Cliente(session['id']).cidade, estado=Cliente(session['id']).estado)
+    return render_template('Informacoes_cadastroCliente.html', nome=Cliente(session['id']).nome, cpf=cpf, telefone=telefone, nascimento=Cliente(session['id']).data_de_nascimento.strftime('%d/%m/%Y'), email=Cliente(session['id']).email, cep=controler.formata_cep(Cliente(session['id']).cep), endereco=Cliente(session['id']).endereco, numero=Cliente(session['id']).numero, complemento=Cliente(session['id']).complemento, cidade=Cliente(session['id']).cidade, estado=Cliente(session['id']).estado)
 
 #CONFIGURAÇÃO DO EMAIL
 app.config['DEBUG']=True
@@ -689,16 +723,27 @@ def gerar_pdf(id_atendimento):
     id_cliente = str(controler.select("id_cliente", "atendimentos", "id_atendimento = " + id_atendimento)[0][0])
 
     profissional = Profissional(id_profissional) #
+    app.logger.info(profissional)
     nomeProfissional = profissional.nome #
     cpfProfissional = controler.formata_cpf(profissional.cpf) #
     regProf = profissional.registro_profissional #
     email = profissional.email #
-    telefone = profissional.telefone_comercial #
+    app.logger.warning(profissional.telefone_comercial)
+    telefone = controler.formata_telefone(profissional.telefone_comercial) #
     enderecoComercial = profissional.endereco #
     numero = profissional.numero #
+    complemento = profissional.complemento #
     cidade = profissional.cidade #
     estado = profissional.estado #
-    CEP = controler.formata_cep(profissional.cep) #
+    cep = controler.formata_cep(profissional.cep) #
+    profissao = profissional.profissao
+
+    enderecoCompleto = enderecoComercial + ", " + numero
+
+    if complemento != "-":
+        enderecoCompleto = enderecoCompleto + ", " + complemento
+    
+    enderecoCompleto = enderecoCompleto + ", " + cidade + ", " + estado + ", " + cep
 
     cliente = Cliente(id_cliente)
     nomeCliente = cliente.nome
@@ -721,9 +766,9 @@ def gerar_pdf(id_atendimento):
     dataGerado = dia+'/'+mes+'/'+ano
 
     if nomeRes == '-' or nomeRes == None:
-        rendered = render_template('pdf_template18+.html', nomeProfissional = nomeProfissional, cpfProfissional=cpfProfissional, regProf = regProf, nomeCliente=nomeCliente, cpfCliente=cpfCliente, precoConsulta=precoConsulta, dataDoAtendimento=dataDoAtendimento, email=email, telefone=controler.formata_telefone(telefone), enderecoComercial=enderecoComercial, numero=numero, cidade=cidade, estado=estado, CEP=CEP, dataGerado=dataGerado)
+        rendered = render_template('pdf_template18+.html', nomeProfissional = nomeProfissional, cpfProfissional=cpfProfissional, regProf = regProf, nomeCliente=nomeCliente, cpfCliente=cpfCliente, precoConsulta=precoConsulta, dataDoAtendimento=dataDoAtendimento, email=email, telefone=telefone,enderecoCompleto=enderecoCompleto, enderecoComercial=enderecoComercial, numero=numero, cidade=cidade, estado=estado, CEP=cep, dataGerado=dataGerado)
     else:
-        rendered = render_template('pdf_template18-.html', nomeProfissional = nomeProfissional, regProf = regProf, profissao = profissao, nome = nome, cpfRes = cpfRes, nomeRes = nomeRes, precoConsulta = precoConsulta, email=email, enderecoComercial = enderecoComercial, telefone = telefone, cep = cep , dataDoAtendimento = dataDoAtendimento)
+        rendered = render_template('pdf_template18-.html', nomeProfissional = nomeProfissional, cpfProfissional=cpfProfissional, regProf = regProf, profissao = profissao, nome = nomeCliente, cpfRes = cpfRes, nomeRes = nomeRes, precoConsulta = precoConsulta, email=email, enderecoCompleto = enderecoCompleto, telefone = telefone, cep = cep , dataDoAtendimento = dataDoAtendimento)
 
     return rendered
 
