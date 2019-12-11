@@ -1,5 +1,4 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response, session, g
-from flask_wtf import FlaskForm, RecaptchaField
 import pdfkit
 import controler
 from flask_mail import Mail, Message
@@ -11,8 +10,6 @@ import uuid
 app = Flask(__name__)
 
 app.secret_key = "PipocaSalgada"
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6Ld6B8cUAAAAABYo48XPJXbP5zCoKF3peLIpEnLF'
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6Ld6B8cUAAAAAMdrG5idXQW25YAK_Sq7jsYoeNi1'
 
 class Usuario():
 
@@ -631,7 +628,7 @@ def DashboardFinanceira():
         ganho_mes_atual = (profissional.ganho_mensal(mes_atual, ano_atual))
         atendimento_mes_atual = profissional.atendimento_mensal(mes_atual, ano_atual)
 
-        return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual)
+        return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual, ganho_anual = sum(grana_anual))
     return redirect(url_for("login"))
 @app.route("/Relatorios", methods=['GET', 'POST'])
 def Relatorios():
