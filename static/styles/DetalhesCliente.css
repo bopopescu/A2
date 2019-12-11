@@ -47,7 +47,7 @@
   .greetings{
     color: #fff;
     font-size: 35px;
-    transform: translate(0,-150px)
+    transform: translate(0,-100px)
   }
   
   .container-login100 {
@@ -94,6 +94,7 @@
   
   .inputBox {
     margin-bottom: 20px;
+    margin-top: 20px;
   }
   
   .input {

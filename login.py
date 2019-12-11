@@ -716,7 +716,7 @@ def DashboardFinanceira():
         ganho_mes_atual = (profissional.ganho_mensal(mes_atual, ano_atual))
         atendimento_mes_atual = profissional.atendimento_mensal(mes_atual, ano_atual)
 
-        return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual, ganho_anual = sum(grana_anual))
+        return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual, ganho_anual = round(sum(grana_anual),2))
     return redirect(url_for("login"))
 @app.route("/Relatorios", methods=['GET', 'POST'])
 def Relatorios():

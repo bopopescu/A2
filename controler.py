@@ -3,14 +3,23 @@ import mysql.connector
 from flask import render_template, make_response
 import pdfkit
 from datetime import date, datetime, timedelta
-
+#online
+'''
 config = {
   'user': 'sql10315021',
   'password': 'amqay846Cl',
   'host': 'sql10.freesqldatabase.com',
   'database': 'sql10315021',
   'port': '3306'}
+'''
 
+#local
+config = {
+  'user': 'root',
+  'password': 'password',
+  'host': '127.0.0.1',
+  'database': 'waat',
+  'port': '3306'}
 con = mysql.connector.connect(**config)
 cursor = con.cursor()
 
@@ -322,7 +331,7 @@ def pre_cadastra(nome, cpf, telefone, email):
     finally:
         cursor.close()
         con.close()
-pre_cadastra('enzo','11223344556','21991152355', 'enzo@gmail.com')
+
 def completa_cadastro_cliente(nome, data_de_nascimento, cpf, telefone, email, senha, cep, endereco, numero, complemento, cidade, estado, nome_responsavel, cpf_responsavel):
     con = None
     cursor = None
@@ -515,7 +524,7 @@ def cliente_atendido(id_atendimento):
     return select('id_cliente','atendimentos','id_atendimento = '+id_atendimento)[0][0]
 
 
-#
+
 def limpa_telefone(telefone):
     if len(telefone)==14:
         ddd = telefone[1:3]
