@@ -28,11 +28,11 @@
                     <div id="table" class="table">
                         <div style="padding: 0 20px 0 30px">
                             <!--nome-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Nome:&nbsp;</strong> {{nome}}
-
+                            <div class="inputBox" name="nome">
+                                <div type="div" class="input" name="nome"><strong>Nome:&nbsp;</strong>
+                                    {{nome}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="nome">
                                     Alterar
                                 </div>
                             </div>
@@ -41,50 +41,56 @@
                                 <div type="div" class="input"><strong>CPF:&nbsp;</strong> {{cpf}}
 
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px">
                                     Alterar
                                 </div>
                             </div>
                             <!--profissao-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Profissão:&nbsp;</strong> {{profissao}}
+                            <div class="inputBox" name="profissao">
+                                <div type="div" class="input" name="profissao"><strong>Profissão:&nbsp;</strong>
+                                    {{profissao}}
 
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="profissao">
                                     Alterar
                                 </div>
                             </div>
                             <!--Registro Profissional-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Registro Profissional:&nbsp;</strong> {{registro}}
-
+                            <div class="inputBox" name="registro_profissional">
+                                <div type="div" class="input" name="registro_profissional"><strong>Registro
+                                        Profissional:&nbsp;</strong>
+                                    {{registro}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px"
+                                    name="registro_profissional">
                                     Alterar
                                 </div>
                             </div>
                             <!--telefone-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Telefone:&nbsp;</strong> {{telefone}}
-
+                            <div class="inputBox" name="telefone">
+                                <div type="div" class="input" name="telefone"><strong>Telefone:&nbsp;</strong>
+                                    {{telefone}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="telefone">
                                     Alterar
                                 </div>
                             </div>
                             <!--nascimento-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Data de nascimento:&nbsp;</strong> {{nascimento}}
+                            <div class="inputBox" name="data_de_nascimento">
+                                <div type="div" class="input" name="data_de_nascimento"><strong>Data de
+                                        nascimento:&nbsp;</strong>
+                                    {{nascimento}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px"
+                                    name="data_de_nascimento">
                                     Alterar
                                 </div>
                             </div>
                             <!--email-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Email:&nbsp;</strong> {{email}}
+                            <div class="inputBox" name="email">
+                                <div type="div" class="input" name="email"><strong>Email:&nbsp;</strong> {{email}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="email">
                                     Alterar
                                 </div>
                             </div>
@@ -92,58 +98,61 @@
                         </div>
                         <div style="padding: 0 30px 0 0" id="divMeio">
                             <!--CEP-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>CEP:&nbsp;</strong> {{cep}}
+                            <div class="inputBox" name="cep">
+                                <div type="div" class="input" name="cep"><strong>CEP:&nbsp;</strong> {{cep}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="cep">
                                     Alterar
                                 </div>
                             </div>
                             <!--endereco-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Endereço:&nbsp;</strong> {{endereco}}
+                            <div class="inputBox" name="endereco">
+                                <div type="div" class="input" name="endereco"><strong>Endereço:&nbsp;</strong>
+                                    {{endereco}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="endereco">
                                     Alterar
                                 </div>
                             </div>
                             <!--numero-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Número:&nbsp;</strong> {{numero}}
+                            <div class="inputBox" name="numero">
+                                <div type="div" class="input" name="numero"><strong>Número:&nbsp;</strong> {{numero}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="numero">
                                     Alterar
                                 </div>
                             </div>
                             <!--complemento-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Complemento:&nbsp;</strong> {{complemento}}
+                            <div class="inputBox" name="complemento">
+                                <div type="div" class="input" name="complemento"><strong>Complemento:&nbsp;</strong>
+                                    {{complemento}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px"
+                                    name="complemento">
                                     Alterar
                                 </div>
                             </div>
                             <!--cidade-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Cidade:&nbsp;</strong> {{cidade}}
+                            <div class="inputBox" name="cidade">
+                                <div type="div" class="input" name="cidade"><strong>Cidade:&nbsp;</strong> {{cidade}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="cidade">
                                     Alterar
                                 </div>
                             </div>
                             <!--estado-->
-                            <div class="inputBox">
-                                <div type="div" class="input"><strong>Estado:&nbsp;</strong> {{estado}}
+                            <div class="inputBox" name="estado">
+                                <div type="div" class="input" name="estado"><strong>Estado:&nbsp;</strong> {{estado}}
                                 </div>
-                                <div class="txt" style="font-size: 17px">
+                                <div class="txt" onclick="showInputBox(this)" style="font-size: 17px" name="estado">
                                     Alterar
                                 </div>
                             </div>
 
-                            <div class="inputBox">
-                                <div type="div" class="input">
-                                </div>
-                                <div class="txt" style="font-size: 17px; opacity: 1;">
+                            <div class="inputBox" name="senha">
+                                <div type="div" class="inputSenha" name="senha"></div>
+                                <div class="txtSenha" onclick="window.location.href = '{{ url_for( 'redf2')}}'" style="font-size: 17px; opacity: 1;"
+                                    name="senha">
                                     Alterar senha
                                 </div>
                             </div>
@@ -164,18 +173,115 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 
-    <script>
-        // window.onmouseover = function (e) {
-        //     if (e.target.className == "input") {
-        //         console.log("hoverou")
-        //         e.target.className = "input2";
-        //         e.target.onmouseleave = function (e) {
-        //             console.log("saiu");
-        //             e.target.className = "input";
+    <script> // Esse script é para fazer aparecer o "Alterar"
+        window.onmouseover = function (e) {
 
-        //         }
-        //     }
-        // };
+            if (e.target.className == "input" && (e.target.childNodes[1].textContent != "")) {
+
+                name = e.target.getAttribute("name");
+                elementos = document.getElementsByName(name)
+                alterar = elementos[0].childNodes[3];
+
+                elementos[1].className = "input input2";
+                alterar.className = "txt txt3"
+
+                alterar.onmouseover = function (e2) {
+                    if (e.target.childNodes[1].textContent != "") {
+                        alterar.className = "txt txt2"
+                        elementos[1].className = "input input2";
+                    }
+                }
+
+                alterar.onmouseleave = function (e2) {
+                    if (e.target.childNodes[1].textContent != "") { alterar.className = "txt txt3" }
+                }
+                elementos[1].onmouseleave = function (e) {
+                    elementos[1].className = "input";
+                    alterar.className = "txt"
+
+                }
+            }
+        };
+    </script>
+
+    <script>
+        function showInputBox(id) {
+            id.className = "txt txt4";
+            var name = id.getAttribute("name");
+            var elementos = document.getElementsByName(name);
+            var input = elementos[1];
+            input.className = "input input3";
+            var value = String(input.childNodes[1].textContent).trimLeft().trimRight();
+
+                input.removeChild(input.lastChild)
+
+            a = document.createElement("div")
+
+            if (name == "telefone") {
+                a.innerHTML = '<input value="' + value + '" class="inputChange" name=' + name + ' type="tel" oninput="this.value = TEL(this.value, event)" maxlength="14"></input>'
+            } else if (name == "data_de_nascimento") {
+                a.innerHTML = '<input value="' + value + '" oninput="this.value = DDMMYYYY(this.value, event)" maxlength="10" class="inputChange" name=' + name + '></input>'
+            }
+            else if (name == "cep") {
+                a.innerHTML = '<input value="' + value + '" maxlength="9" oninput="this.value = CEP(this.value, event)" class="inputChange" name=' + name + '></input>'
+
+            }
+            else {
+                a.innerHTML = '<input value="' + value + '" class="inputChange" name=' + name + '></input>'
+            }
+
+            console.log(input.childNodes)
+            console.log(input.childNodes[0])
+
+
+            input.appendChild(a);
+
+        }
+    </script>
+
+
+    <script> //formatações
+        function TEL(value, event) {
+            let newValue = value.replace(/[^0-9]/g, '');
+
+            // on delete key.
+            if (!event.data) {
+                return value;
+            }
+
+            newValue = "(" + newValue;
+
+            if (newValue.split('').length > 11) {
+                return newValue.split('').map((v, i) => i == 2 ? v + ")" : (i == 7 ? v + "-" : v)).join('');
+            } else {
+                return newValue.split('').map((v, i) => i == 2 ? v + ")" : (i == 6 ? v + "-" : v)).join('');
+            }
+            // return newValue;
+        };
+
+        function DDMMYYYY(value, event) {
+            let newValue = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+
+            const dayOrMonth = (index) => index % 2 === 1 && index < 4;
+
+            // on delete key.
+            if (!event.data) {
+                return value;
+            }
+
+            return newValue.split('').map((v, i) => dayOrMonth(i) ? v + '/' : v).join('');
+        };
+
+        function CEP(value, event) {
+            let newValue = value.replace(/[^0-9]/g, '');
+
+            // on delete key.
+            if (!event.data) {
+                return value;
+            }
+
+            return newValue.split('').map((v, i) => i == 4 ? v + "-" : v).join('');
+        };
     </script>
 
 

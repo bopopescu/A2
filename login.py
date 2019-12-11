@@ -540,7 +540,6 @@ def CadastrarAtendimentos():
                     telefone = request.form["telefone"]
                     cpf = controler.limpa_cpf(request.form['cpfCliente'])
                     controler.pre_cadastra(nome, cpf, controler.limpa_telefone(telefone), email)
-                    
                     id_usuarioAtendimento = controler.cpf_id(cpf)
                     controler.cadastra_cliente(id_usuarioAtendimento,'-','-''-','-','-','-','-','-','-') 
                      #Se o cliente n tá cadastrado, é criado um semi-cadastro e depois o id_cliente dele é puxado
@@ -563,15 +562,52 @@ def CadastrarAtendimentos():
 
 @app.route('/infoProfissional', methods=['GET', 'POST'])
 def Informacoes_cadastroPro():
+    
     telefone = Profissional(session['id']).telefone
-    if len(telefone) == 11:
-        telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:7], telefone[7:])
-    else:
-        telefone = '({}) {}-{}'.format(telefone[0:2],telefone[2:6], telefone[6:])
     cpf = Profissional(session['id']).cpf
     cpf = '{}.{}.{}-{}'.format(cpf[0:3],cpf[3:6],cpf[6:9],cpf[9:])
     nascimento = Profissional(session['id']).data_de_nascimento
-    return render_template('Informacoes_cadastroPro.html', nome=Profissional(session['id']).nome, cpf=cpf, profissao=Profissional(session['id']).profissao, registro=Profissional(session['id']).registro_profissional, telefone=telefone, nascimento=nascimento.strftime('%d/%m/%Y'), email=Profissional(session['id']).email, cep=Profissional(session['id']).cep, endereco=Profissional(session['id']).endereco, numero=Profissional(session['id']).numero, complemento=Profissional(session['id']).complemento, cidade=Profissional(session['id']).cidade, estado=Profissional(session['id']).estado)
+
+    if request.method == "POST":
+        app.logger.warning(request.form)
+        if "nome" in request.form:
+            controler.update({"nome":request.form["nome"]},"usuarios","id="+session["id"])
+        if "profissao" in request.form:
+            controler.update({"profissao":request.form["profissao"]},"profissionais","id_profissional="+session["id"])
+        if "registro_profissional" in request.form:
+            if request.form["registro_profissional"] == "":
+                registroProfissional = "-"
+            else:
+                registroProfissional = request.form["registro_profissional"]
+            controler.update({"registro_profissional":registroProfissional},"profissionais","id_profissional="+session["id"])
+        if "telefone" in request.form:
+            telefone2 = controler.limpa_telefone(request.form["telefone"])
+            controler.update({"telefone":telefone2},"usuarios","id="+session["id"])
+            controler.update({"telefone_comercial":telefone2},"profissionais","id_profissional="+session["id"])
+        if "data_de_nascimento" in request.form:
+            dataDeNascimento = request.form["data_de_nascimento"]
+            controler.update({"data_de_nascimento":controler.inverte_data(dataDeNascimento)},"usuarios","id="+session["id"])
+        if "email" in request.form:
+            email = request.form["email"]
+            user_mail = controler.separa_email(email)[0]
+            domain_mail = controler.separa_email(email)[1]
+            controler.update({"email":email},"usuarios","id="+session["id"])
+            controler.update({"user_mail":user_mail},"usuarios","id="+session["id"])
+            controler.update({"domain_mail":domain_mail},"usuarios","id="+session["id"])
+        if "cep" in request.form:
+            controler.update({"cep":request.form["cep"]},"profissionais","id_profissional="+session["id"])
+        if "endereco" in request.form:
+            controler.update({"endereco":request.form["endereco"]},"profissionais","id_profissional="+session["id"])
+        if "estado" in request.form:
+            controler.update({"estado":request.form["estado"]},"profissionais","id_profissional="+session["id"])
+        if "numero" in request.form:
+            controler.update({"numero":request.form["numero"]},"profissionais","id_profissional="+session["id"])
+        if "complemento" in request.form:
+            controler.update({"complemento":request.form["complemento"]},"profissionais","id_profissional="+session["id"])
+        if "cidade" in request.form:
+            controler.update({"cidade":request.form["cidade"]},"profissionais","id_profissional="+session["id"])
+
+    return render_template('Informacoes_cadastroPro.html', nome=Profissional(session['id']).nome, cpf=cpf, profissao=Profissional(session['id']).profissao, registro=Profissional(session['id']).registro_profissional, telefone=controler.formata_telefone(telefone), nascimento=nascimento.strftime('%d/%m/%Y'), email=Profissional(session['id']).email, cep=Profissional(session['id']).cep, endereco=Profissional(session['id']).endereco, numero=Profissional(session['id']).numero, complemento=Profissional(session['id']).complemento, cidade=Profissional(session['id']).cidade, estado=Profissional(session['id']).estado)
 
 @app.route('/infoCliente', methods=['GET', 'POST'])
 def Informacoes_cadastroCliente():
@@ -640,6 +676,23 @@ def redf(token):
                 error = "As senhas não conferem."
         else:
             error = "O token expirou."
+    return render_template('redefinir_senha.html', error = error)   
+
+@app.route('/redefinir2', methods=['GET', 'POST'])
+def redf2():
+    error = None
+    if request.method == 'POST':
+        senhanova = request.form['senhanova']
+        confirma_senhanova = request.form['confirma_senhanova']
+        if senhanova == confirma_senhanova:
+            hashed_nova = generate_password_hash(senhanova)
+            cpf = Profissional(session["id"]).cpf
+            if controler.verifica_cpf(cpf, 'usuarios'):
+                ups = {'senha':hashed_nova}
+                controler.update(ups, "usuarios", "cpf="+cpf)
+            return redirect(url_for('login'))
+        else:
+            error = "As senhas não conferem."
     return render_template('redefinir_senha.html', error = error)   
 
 @app.route('/enviaEmail/')
