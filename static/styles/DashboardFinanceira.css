@@ -37,15 +37,13 @@ body {
     padding: 5px;
     position: auto;
   }
-  
+
   .tituloBloco{
-    /* font-family: Roboto Regular; */
     text-align: center;
     font-size: 20px;
   }
   
   .valorBloco{
-    /* font-family: Roboto Regular, bold; */
     font-weight: 600;
     float: center;
     text-align: center;

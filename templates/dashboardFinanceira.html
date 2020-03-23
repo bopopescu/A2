@@ -14,9 +14,9 @@
 
   </head>
   <body>
-    <div style = "position: fixed;">
-      <i class="fa icon" style="font-size: 40px; position: absolute;" onclick="window.location.href='{{ url_for('loggedProfissional')}}'">&#xf0a8;</i>
-    </div>
+    
+        
+    <div style="margin: 50px;">
       <div class = "wrapper">
 
         <div class = "ChartBox">
@@ -101,7 +101,7 @@
                 borderColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 0, 0, 1)', 'rgba(248, 169, 120, 1)'],
                 backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(192, 0, 0, 0.2)', 'rgba(248, 169, 120, 0.2)'],
                 pointBorderColor: "#80b6f4",
-                data: {{formaPagamento}}
+                data: [1,2,3]
               }
             ]
           },
@@ -115,5 +115,6 @@
       </div>
 
     </div>
+  </div>
   </body>
 </html>

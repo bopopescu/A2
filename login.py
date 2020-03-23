@@ -480,7 +480,7 @@ def DetalhesCliente(id_cliente):
             dic = request.form.to_dict()
             app.logger.warning(dic)
             dicInvertido = dict(zip(dic.values(),dic.keys()))
-            if "Baixar recibo" in dicInvertido :
+            if "Baixar recibo" in dicInvertido:
                 index = int(dicInvertido["Baixar recibo"])
                 id_atendimento = str(recibosNew[index][0])
                 rendered = gerar_pdf(id_atendimento)
@@ -718,6 +718,7 @@ def DashboardFinanceira():
 
         return render_template("dashboardFinanceira.html", ganhos = grana_anual, formaPagamento = formaPagamento_anual, atendimentos = atendimento_anual, ganho_mes_atual = ganho_mes_atual, atendimento_mes_atual=atendimento_mes_atual, ganho_anual = round(sum(grana_anual),2))
     return redirect(url_for("login"))
+    
 @app.route("/Relatorios", methods=['GET', 'POST'])
 def Relatorios():
     if "user" in session:
